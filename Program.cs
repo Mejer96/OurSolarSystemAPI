@@ -10,6 +10,15 @@ using OurSolarSystemAPI.Service;
 using Microsoft.OpenApi.Models;
 using Neo4j.Driver;
 using OurSolarSystemAPI.Repository;
+using OurSolarSystemAPI.Service;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models; // For Swagger and OpenAPI configurations
+using Microsoft.AspNetCore.Authorization; // For [Authorize] attribute
+using Microsoft.AspNetCore.Mvc;
+using OurSolarSystemAPI.Repository.MongoDB; // For API controllers and IActionResult
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +82,17 @@ builder.Services.AddScoped<ArtificialSatelliteRepositoryNEO4J>();
 builder.Services.AddScoped<UserRepositoryMySQL>();
 builder.Services.AddScoped<EphemerisRepositoryNEO4J>();
 builder.Services.AddSingleton(GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "Password123")));
+builder.Services.AddScoped<BarycenterRepository>();
+builder.Services.AddScoped<PlanetRepository>();
+builder.Services.AddScoped<ArtificialSatelliteRepository>();
+builder.Services.AddScoped<ScrapingService>();
+
+//mongo
+builder.Services.AddSingleton<MongoDbContext>();
+builder.Services.AddScoped<MongoBarycenterRepository>();
+builder.Services.AddScoped<MongoPlanetRepository>();
+builder.Services.AddScoped<MongoArtificialSatelliteRepository>();
+builder.Services.AddScoped<MongoScrapingService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
