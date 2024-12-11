@@ -13,7 +13,7 @@ namespace OurSolarSystemAPI.Service
             foreach (var barycenter in barycenters) 
             {
                 var ephemeris = new List<EphemerisBarycenter>();
-                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{barycenter.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2034-02-01";
+                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{barycenter.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2124-02-01";
                 string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
                 List<Dictionary<string, object>> vectors = horizonParser.ExtractEphemeris(apiResponse);
                 
