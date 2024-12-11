@@ -26,7 +26,36 @@ namespace OurSolarSystemAPI.Controllers.MySQL
         {
             return Ok(_satelliteService.RequestSatelliteByNoradIdAndDateTime(noradId, dateTime));
         }
-        
+
+        [HttpPost("log-search")]
+        public IActionResult LogSatelliteSearch([FromQuery] int noradId)
+        {
+            try
+            {
+                _satelliteService.LogSatelliteSearch(noradId);
+                return Ok("Search logged successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("sum-satellite-orbits")]
+        public IActionResult GetSumOfSatelliteOrbits()
+        {
+            try
+            {
+                var totalOrbits = _satelliteService.GetSumOfSatelliteOrbits();
+                return Ok(new { TotalOrbits = totalOrbits });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
     }
 
 }

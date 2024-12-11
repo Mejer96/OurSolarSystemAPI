@@ -21,7 +21,18 @@ namespace OurSolarSystemAPI.Service
         {
             return _artificialSatelliteRepo.RequestSatelliteLocationByNoradIdAndDateTime(noradId, dateTime);
         }
-    
+
+        public void LogSatelliteSearch(int noradId)
+        {
+            _artificialSatelliteRepo.LogSatelliteSearch(noradId);
+        }
+
+        public int GetSumOfSatelliteOrbits()
+        {
+            return _artificialSatelliteRepo.GetSumOfSatelliteOrbits();
+        }
+
+
     }
 
 }

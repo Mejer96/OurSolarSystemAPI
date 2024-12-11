@@ -32,6 +32,45 @@ namespace OurSolarSystemAPI.Repository {
                 .FirstOrDefault();
         }
 
+        public void LogSatelliteSearch(int noradId)
+        {
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "LogSatelliteSearch"; // Stored procedure name
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    var noradIdParam = command.CreateParameter();
+                    noradIdParam.ParameterName = "@NoradId";
+                    noradIdParam.Value = noradId;
+                    command.Parameters.Add(noradIdParam);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public int GetSumOfSatelliteOrbits()
+        {
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    // Call the SumSatelliteOrbits function
+                    command.CommandText = "SELECT SumSatelliteOrbits() AS TotalOrbits";
+                    command.CommandType = System.Data.CommandType.Text;
+
+                    var result = command.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
+            }
+        }
+
+
+
         // public void AddEphemerisToExistingSatellite(OurSolarSystemContext context, List<EphemerisArtificialSatellite> ephemeris, int satelliteId) 
         // {
         //     var satellite = context.ArtificialSatellites.FirstOrDefault(s => s.Id == satelliteId);

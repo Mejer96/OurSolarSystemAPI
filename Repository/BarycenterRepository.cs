@@ -35,6 +35,54 @@ namespace OurSolarSystemAPI.Repository
                 .FirstOrDefault();
         }
 
+
+        public List<BarycenterLocation> GetBarycenterLocations(DateTime startDate, DateTime endDate, int horizonId)
+        {
+            var locations = new List<BarycenterLocation>();
+
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "GetBarycenterLocations"; // Stored procedure name
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    // Add parameters
+                    var startDateParam = command.CreateParameter();
+                    startDateParam.ParameterName = "@StartDate";
+                    startDateParam.Value = startDate;
+                    command.Parameters.Add(startDateParam);
+
+                    var endDateParam = command.CreateParameter();
+                    endDateParam.ParameterName = "@EndDate";
+                    endDateParam.Value = endDate;
+                    command.Parameters.Add(endDateParam);
+
+                    var horizonIdParam = command.CreateParameter();
+                    horizonIdParam.ParameterName = "@HorizonId";
+                    horizonIdParam.Value = horizonId;
+                    command.Parameters.Add(horizonIdParam);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            locations.Add(new BarycenterLocation
+                            {
+                                BarycenterName = reader["BarycenterName"].ToString(),
+                                PositionX = Convert.ToDouble(reader["PositionX"]),
+                                PositionY = Convert.ToDouble(reader["PositionY"]),
+                                PositionZ = Convert.ToDouble(reader["PositionZ"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return locations;
+        }
+
     }
 
 

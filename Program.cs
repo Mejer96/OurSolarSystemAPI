@@ -52,8 +52,15 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<ScrapingService>();
 builder.Services.AddScoped<BarycenterRepository>();
 builder.Services.AddScoped<PlanetRepository>();
+builder.Services.AddScoped<MoonRepository>();
 builder.Services.AddScoped<ArtificialSatelliteRepository>();
 builder.Services.AddScoped<ScrapingService>();
+
+
+builder.Services.AddScoped<PlanetService>();
+builder.Services.AddScoped<BarycenterService>();
+builder.Services.AddScoped<MoonService>();
+builder.Services.AddScoped<ArtificialSatelliteService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

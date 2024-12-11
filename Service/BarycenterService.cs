@@ -21,9 +21,19 @@ namespace OurSolarSystemAPI.Service
         public Barycenter RequestBarycenterLocationByHorizonIdAndDateTime(int horizonId, DateTime dateTime) 
         {
            return _barycenterRepo.RequestBarycenterLocationByHorizonIdAndDateTime(horizonId, dateTime);
-        } 
-        
-        
+        }
+
+        public List<BarycenterLocation> GetBarycenterLocations(DateTime startDate, DateTime endDate, int horizonId)
+        {
+            if (startDate >= endDate)
+            {
+                throw new ArgumentException("Start date must be earlier than end date.");
+            }
+
+            return _barycenterRepo.GetBarycenterLocations(startDate, endDate, horizonId);
+        }
+
+
     }
     
 }

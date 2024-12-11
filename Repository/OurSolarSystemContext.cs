@@ -10,6 +10,7 @@ namespace OurSolarSystemAPI.Repository
         public DbSet<Planet> Planets { get; set; }
         public DbSet<Moon> Moons { get; set; }
         public DbSet<ArtificialSatellite> ArtificialSatellites  { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
 
         public DbSet<EphemerisBarycenter> EphemerisBarycenters { get; set; }
         public DbSet<EphemerisPlanet> EphemerisPlanets { get; set; }

@@ -1,6 +1,8 @@
+using System.Data;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using OurSolarSystemAPI.Models;
+using Dapper;
 
 namespace OurSolarSystemAPI.Repository 
 {
@@ -67,6 +69,82 @@ namespace OurSolarSystemAPI.Repository
                 _context.SaveChanges();
             }
         }
+
+        public List<PlanetLocation> GetPlanetLocations(DateTime startDate, DateTime endDate)
+        {
+            // List to store results
+            var locations = new List<PlanetLocation>();
+
+            // Open a raw SQL connection
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "GetPlanetLocations"; // Stored procedure name
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    // Add parameters for the stored procedure
+                    var startDateParam = command.CreateParameter();
+                    startDateParam.ParameterName = "@StartDate";
+                    startDateParam.Value = startDate;
+                    command.Parameters.Add(startDateParam);
+
+                    var endDateParam = command.CreateParameter();
+                    endDateParam.ParameterName = "@EndDate";
+                    endDateParam.Value = endDate;
+                    command.Parameters.Add(endDateParam);
+
+                    // Execute the command
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            locations.Add(new PlanetLocation
+                            {
+                                PlanetName = reader["PlanetName"].ToString(),
+                                PositionX = Convert.ToDouble(reader["PositionX"]),
+                                PositionY = Convert.ToDouble(reader["PositionY"]),
+                                PositionZ = Convert.ToDouble(reader["PositionZ"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return locations;
+        }
+
+        public decimal GetTotalPlanetMass()
+        {
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    // Call the TotalPlanetMass function
+                    command.CommandText = "SELECT TotalPlanetMass() AS TotalMass";
+                    command.CommandType = System.Data.CommandType.Text;
+
+                    var result = command.ExecuteScalar();
+                    return result != null ? Convert.ToDecimal(result) : 0;
+                }
+            }
+        }
+
+        public List<PlanetOverview> GetPlanetOverview()
+        {
+            var query = "SELECT * FROM PlanetOverview";
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                connection.Open();
+                return connection.Query<PlanetOverview>(query).ToList();
+            }
+        }
+
+
     }
 
+
 }
+
