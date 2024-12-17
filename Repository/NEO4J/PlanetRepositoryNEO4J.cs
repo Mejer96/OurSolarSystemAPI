@@ -17,7 +17,6 @@ namespace OurSolarSystemAPI.Repository.NEO4J
         {
             return new Dictionary<string, object?>
             {
-                { "id", planet.Id },
                 { "horizonId", planet.HorizonId },
                 { "name", planet.Name },
                 { "volumeMeanRadius", planet.VolumeMeanRadius },
@@ -60,31 +59,34 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                 { "solarConstantMean", planet.SolarConstantMean }
             };
         }
-        public async Task<List<IRecord>> createPlanetNodesFromList(List<Dictionary<string, object>> planets) 
+        public async Task<IRecord> CreatePlanetNode(Planet planet)
         {
             await using var session = _driver.AsyncSession();
-            
-            var parameters = new Dictionary<string, object> 
+
+            Dictionary<string, object?> planetAttributes = ConvertPlanetAttributesToDict(planet);
+            Dictionary<string, object?> orbitAttributes = ConvertPlanetOrbitalAttributesToDict(planet);
+
+            var parameters = new Dictionary<string, object>
             {
-                {"planets", planets}
+                {"planet", planetAttributes},
+                {"orbit", orbitAttributes},
+                {"barycenterHorizonId", planet.BarycenterHorizonId}
             };
 
             var query = @"
-                UNWIND $planets AS planet
-                CREATE (p:planet)
-                SET p = planet
+                CREATE (p:Planet $planet)
                 WITH p
-                MATCH (b:Barycenter) WHERE b.Name = planet.Name + ' Barycenter'
-                CREATE (p)-[:ORBITS]->(b)
-                RETURN count(*) AS count";
+                MATCH (b:Barycenter) WHERE b.horizonId = $barycenterHorizonId
+                CREATE (p)-[:ORBITS $orbit]->(b)
+                RETURN p";
 
-                var result = await session.ExecuteWriteAsync(async tx =>
-                {
-                    var cursor = await tx.RunAsync(query, parameters);
-                    return await cursor.ToListAsync();
-                });
+            var result = await session.ExecuteWriteAsync(async tx =>
+            {
+                var cursor = await tx.RunAsync(query, parameters);
+                return await cursor.SingleAsync();
+            });
+
             return result;
-
         }
     }
     

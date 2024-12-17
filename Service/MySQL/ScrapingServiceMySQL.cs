@@ -31,7 +31,7 @@ namespace OurSolarSystemAPI.Service.MySQL
 
             foreach (Barycenter barycenter in barycenters) 
             {
-                _barycenterRepo.CreateBarycenter(barycenter);
+                await _barycenterRepo.CreateBarycenter(barycenter);
             }
         }
 
@@ -41,7 +41,7 @@ namespace OurSolarSystemAPI.Service.MySQL
 
             foreach (Planet planet in planets) 
             {
-                _planetRepo.CreatePlanet(planet);
+                await _barycenterRepo.AddPlanetToExistingBarycenter(planet, planet.BarycenterHorizonId);
             }
         }
 
@@ -51,7 +51,7 @@ namespace OurSolarSystemAPI.Service.MySQL
 
             foreach (List<Moon> moonList in moonlists) 
             {
-                _planetRepo.AddMoonsToExistingPlanet(moonList, moonList[0].HorizonPlanetId);
+                await _moonRepo.addMoonsToExistingPlanetAndBarycenter(moonList, moonList[0].PlanetHorizonId, moonList[0].BarycenterHorizonId);
             }
         }
 

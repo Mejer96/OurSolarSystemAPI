@@ -13,25 +13,16 @@ namespace OurSolarSystemAPI.Service
             foreach (var barycenter in barycenters) 
             {
                 var ephemeris = new List<EphemerisBarycenter>();
-                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{barycenter.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2124-02-01";
+                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{barycenter.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-02-01";
                 string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
                 List<Dictionary<string, object>> vectors = horizonParser.ExtractEphemeris(apiResponse);
                 
                 foreach (var vector in vectors) 
                 {
-                    ephemeris.Add(EphemerisBarycenter.convertEphemerisDictToObject(vector, barycenter));
+                    ephemeris.Add(EphemerisBarycenter.ConvertEphemerisDictToObject(vector, barycenter));
                 }
                 barycenter.Ephemeris = ephemeris;
             }
-            return barycenters;
-        }
-
-        public List<Barycenter> ScrapeAndAddBarycentersToDBNeo4j() 
-        {
-            var horizonScraper = new HorizonHardcodedData();
-            var horizonParser = new HorizonParser();
-            List<Barycenter> barycenters = horizonScraper.BarycenterData();
-
             return barycenters;
         }
 
@@ -54,14 +45,14 @@ namespace OurSolarSystemAPI.Service
 
             foreach (var planet in planets) 
             {
-                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{planet.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2034-01-01";
+                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{planet.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-02-01";
                 string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
                 List<Dictionary<string, object>> vectorSets = horizonParser.ExtractEphemeris(apiResponse);
                 var ephemeris = new List<EphemerisPlanet>();
                 
                 foreach (var vectorSet in vectorSets) 
                 {
-                    ephemeris.Add(EphemerisPlanet.convertEphemerisDictToObject(vectorSet, planet));
+                    ephemeris.Add(EphemerisPlanet.ConvertEphemerisDictToObject(vectorSet, planet));
                 }
                 planet.Ephemeris = ephemeris;
             }
@@ -74,24 +65,25 @@ namespace OurSolarSystemAPI.Service
             List<MoonContainer> moonContainers = MoonContainer.InstantiatePlanetAndMoonStructs();
             var moonLists = new List<List<Moon>>();
 
-            foreach (var planet in moonContainers) 
+            foreach (var mooncontainer in moonContainers) 
             {
                 var moons = new List<Moon>();
-                foreach (var moonDesignators in planet.Moons) 
+                foreach (var moonDesignators in mooncontainer.Moons) 
                 {
-                    string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{moonDesignators.ID}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-01-02";
+                    string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{moonDesignators.ID}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-02-01";
                     string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
                     Moon moon = horizonParser.ExtractMoonData(apiResponse);
-                    Console.WriteLine("Moon data // " + moon.Name);
                     var ephemeris = new List<EphemerisMoon>();
                     List<Dictionary<string, object>> vectorSets = horizonParser.ExtractEphemeris(apiResponse);
 
                     foreach (var vectorSet in vectorSets) 
                     {
-                        ephemeris.Add(EphemerisMoon.convertEphemerisDictToObject(vectorSet, moon));
+                        ephemeris.Add(EphemerisMoon.ConvertEphemerisDictToObject(vectorSet, moon));
                     }
-                    moon.HorizonPlanetId = planet.HorizonPlanetId;
-                    moon.PlanetName = planet.Name;
+                    moon.PlanetHorizonId = mooncontainer.PlanetHorizonId;
+                    moon.BarycenterHorizonId = mooncontainer.BarycenterHorizonId;
+                    moon.HorizonId = moonDesignators.ID; 
+                    moon.PlanetName = mooncontainer.Name;
                     moon.Ephemeris = ephemeris;
                     moons.Add(moon);
                 }

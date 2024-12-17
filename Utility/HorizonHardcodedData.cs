@@ -26,6 +26,7 @@ namespace OurSolarSystemAPI.Utility
             return new Planet
             {
                 HorizonId = 199,
+                BarycenterHorizonId = 1,
                 Name = "Mercury",
                 VolumeMeanRadius = "2439.4±0.1",
                 Density = "5.427",
@@ -67,6 +68,7 @@ namespace OurSolarSystemAPI.Utility
             return new Planet
             {
                 HorizonId = 299,
+                BarycenterHorizonId = 2,
                 Name = "Venus",
                 VolumeMeanRadius = "6051.84 ± 0.01",
                 Density = "5.204",
@@ -110,6 +112,7 @@ namespace OurSolarSystemAPI.Utility
             return new Planet
             {
                 HorizonId = 399,
+                BarycenterHorizonId = 3,
                 Name = "Earth",
                 VolumeMeanRadius = "3389.92 ± 0.04",
                 Density = "3.933 (5 ± 4)",
@@ -152,6 +155,7 @@ namespace OurSolarSystemAPI.Utility
             return new Planet
             {
                 HorizonId = 499,
+                BarycenterHorizonId = 4,
                 Name = "Mars",
                 VolumeMeanRadius = "3389.92 ± 0.04",
                 Density = "3.933(5 ± 4)",
@@ -193,6 +197,7 @@ namespace OurSolarSystemAPI.Utility
             return new Planet
             {
                 HorizonId = 599,
+                BarycenterHorizonId = 5,
                 Name = "Jupiter",
                 VolumeMeanRadius = "69911 ± 6",
                 Density = "1.3262 ± 0.0003",
@@ -235,6 +240,7 @@ namespace OurSolarSystemAPI.Utility
             return new Planet
             {
                 HorizonId = 699,
+                BarycenterHorizonId = 6,
                 Name = "Saturn",
                 VolumeMeanRadius = "58232 ± 6",
                 Density = "0.687 ± 0.001",
@@ -276,6 +282,7 @@ namespace OurSolarSystemAPI.Utility
             return new Planet
             {
                 HorizonId = 799,
+                BarycenterHorizonId = 7,
                 Name = "Uranus",
                 VolumeMeanRadius = "25362 ± 12",
                 Density = "1.271",
@@ -317,6 +324,7 @@ namespace OurSolarSystemAPI.Utility
             return new Planet
             {
                 HorizonId = 899,
+                BarycenterHorizonId = 8,
                 Name = "Neptune",
                 VolumeMeanRadius = "24624 ± 21",
                 Density = "1.638",
@@ -358,6 +366,7 @@ namespace OurSolarSystemAPI.Utility
             return new Planet
             {
                 HorizonId = 999,
+                BarycenterHorizonId = 9,
                 Name = "Pluto",
                 VolumeMeanRadius = "1188.3 ± 1.6",
                 Density = "1.86",

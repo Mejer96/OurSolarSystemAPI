@@ -12,11 +12,12 @@ namespace OurSolarSystemAPI.Utility
     }
 
 
-    public class MoonContainer(string name, List<HorizonMoonDesignators> moons, int horizonPlanetID)
+    public class MoonContainer(string name, List<HorizonMoonDesignators> moons, int planetHorizonId, int barycenterHorizonId)
     {
         public string Name = name;
-        public int HorizonPlanetId = horizonPlanetID;
+        public int PlanetHorizonId = planetHorizonId;
         public List<HorizonMoonDesignators> Moons = moons;
+        public int BarycenterHorizonId = barycenterHorizonId;
 
 
         public static List<MoonContainer> InstantiatePlanetAndMoonStructs() 
@@ -205,12 +206,12 @@ namespace OurSolarSystemAPI.Utility
 
             return new List<MoonContainer>
             {
-                new MoonContainer("earth", earthMoons, 399),
-                new MoonContainer("mars", marsMoons, 499),
-                new MoonContainer("jupiter", jupiterMoons, 599),
-                new MoonContainer("saturn", saturnMoons, 699),
-                new MoonContainer("uranus", uranusMoons, 799),
-                new MoonContainer("neptune", neptuneMoons, 899)
+                new MoonContainer("earth", earthMoons, 399, 3),
+                new MoonContainer("mars", marsMoons, 499, 4),
+                new MoonContainer("jupiter", jupiterMoons, 599, 5),
+                new MoonContainer("saturn", saturnMoons, 699, 6),
+                new MoonContainer("uranus", uranusMoons,799, 7),
+                new MoonContainer("neptune", neptuneMoons, 899, 8)
             };                   
         }
     }

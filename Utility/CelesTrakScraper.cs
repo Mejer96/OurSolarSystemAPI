@@ -22,7 +22,7 @@ namespace OurSolarSystemAPI.Utility
                     VelocityX = eciCoords.Velocity.X,
                     VelocityY = eciCoords.Velocity.Y,
                     VelocityZ = eciCoords.Velocity.Z,
-                    Epoch = tle.Epoch.ToString(),
+                    JulianDate = tle.Epoch.ToJulian(),
                     DateTime = dateTime
                 };
 

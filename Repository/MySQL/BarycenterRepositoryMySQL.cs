@@ -13,10 +13,51 @@ namespace OurSolarSystemAPI.Repository.MySQL
             _context = context;
         }
 
-        public void CreateBarycenter(Barycenter barycenter) 
+        public async Task CreateBarycenter(Barycenter barycenter) 
         {
-            _context.Barycenters.Add(barycenter);
-            _context.SaveChanges();
+            await _context.Barycenters.AddAsync(barycenter);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddPlanetToExistingBarycenter(Planet planet, int horizonId) 
+        {
+            Barycenter barycenter = await _context.Barycenters.FirstOrDefaultAsync(b => b.HorizonId == horizonId);
+
+            if (barycenter != null)
+            {
+                barycenter.Planets ??= new List<Planet>();
+                barycenter.Planets.Add(planet);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddMoonToExistingBarycenter(Moon moon, int horizonId) 
+        {
+            Barycenter barycenter = await _context.Barycenters.FirstOrDefaultAsync(b => b.HorizonId == horizonId);
+
+            if (barycenter != null)
+            {
+                barycenter.Moons ??= new List<Moon>();
+                barycenter.Moons.Add(moon);
+                _context.SaveChanges();
+            }
+        }
+
+
+        public async Task<List<Barycenter>> requestAllBarycentersWithEphemeris() 
+        {
+            return await _context.Barycenters
+            .Include(b => b.Ephemeris)
+            .ToListAsync();
+        }
+
+        public async Task<List<Barycenter>> requestAllBarycentersWithRelations()
+        {
+            return await _context.Barycenters
+                .Include(b => b.Planets)
+                    .ThenInclude(p => p.Moons)
+                .Include(b => b.Ephemeris)
+                .ToListAsync();
         }
 
         public Barycenter? RequestBarycenterLocationByNameAndDateTime(string name, DateTime dateTime)

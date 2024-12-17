@@ -44,12 +44,9 @@ namespace OurSolarSystemAPI.Service.MySQL
             return data;
         }
 
-
-
-
-        public List<Planet> requestAllPlanetsWithEphemeris() 
+        public async Task<List<Planet>> requestAllPlanetsWithEphemeris() 
         {
-            List<Planet> planets = _planetRepo.requestAllPlanetsWithEphemeris();
+            List<Planet> planets = await _planetRepo.requestAllPlanetsWithEphemeris();
             double scalingFactor = 1e+20;
 
             foreach (Planet planet in planets) 

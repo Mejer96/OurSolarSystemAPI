@@ -3,44 +3,44 @@ using OurSolarSystemAPI.Models;
 
 namespace OurSolarSystemAPI.Repository.MongoDB
 {
-    public class MongoArtificialSatelliteRepository
+    public class ArtificialSatelliteRepositoryMongoDB
     {
         private readonly IMongoCollection<ArtificialSatellite> _satellites;
 
-        public MongoArtificialSatelliteRepository(MongoDbContext context)
+        public ArtificialSatelliteRepositoryMongoDB(MongoDbContext context)
         {
             _satellites = context.GetCollection<ArtificialSatellite>("ArtificialSatellites");
         }
 
-        // Create a new artificial satellite
-        public async Task CreateSatelliteAsync(ArtificialSatellite satellite)
+        public async Task CreateSatellite(ArtificialSatellite satellite)
         {
             await _satellites.InsertOneAsync(satellite);
         }
 
-        // Retrieve a satellite by NORAD ID
-        public async Task<ArtificialSatellite?> GetSatelliteByNoradIdAsync(int noradId)
+        public async Task CreateSatellites(List<ArtificialSatellite> satellites)
+        {
+            await _satellites.InsertManyAsync(satellites);
+        }
+
+        public async Task<ArtificialSatellite?> GetSatelliteByNoradId(int noradId)
         {
             var filter = Builders<ArtificialSatellite>.Filter.Eq(s => s.NoradId, noradId);
             return await _satellites.Find(filter).FirstOrDefaultAsync();
         }
 
-        // Retrieve satellites launched from a specific site
-        public async Task<List<ArtificialSatellite>> GetSatellitesByLaunchSiteAsync(string launchSite)
+        public async Task<List<ArtificialSatellite>> GetSatellitesByLaunchSite(string launchSite)
         {
             var filter = Builders<ArtificialSatellite>.Filter.Eq(s => s.LaunchSite, launchSite);
             return await _satellites.Find(filter).ToListAsync();
         }
 
-        // Update an existing satellite
-        public async Task UpdateSatelliteAsync(int noradId, ArtificialSatellite updatedSatellite)
+        public async Task UpdateSatellite(int noradId, ArtificialSatellite updatedSatellite)
         {
             var filter = Builders<ArtificialSatellite>.Filter.Eq(s => s.NoradId, noradId);
             await _satellites.ReplaceOneAsync(filter, updatedSatellite);
         }
 
-        // Delete a satellite by NORAD ID
-        public async Task DeleteSatelliteAsync(int noradId)
+        public async Task DeleteSatellite(int noradId)
         {
             var filter = Builders<ArtificialSatellite>.Filter.Eq(s => s.NoradId, noradId);
             await _satellites.DeleteOneAsync(filter);

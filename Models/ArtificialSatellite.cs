@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace OurSolarSystemAPI.Models
 {

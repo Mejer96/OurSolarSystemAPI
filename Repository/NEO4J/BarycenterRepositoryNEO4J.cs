@@ -16,15 +16,25 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             _driver = driver;
         }
 
-        public async Task<string?> CreateNodeSolarSystemBarycenter(Barycenter solarSystemBarycenter) 
+        public Dictionary<string, object> ConvertBarycenterObjectToDict(Barycenter barycenter) 
+        {
+            return new Dictionary<string, object> 
+            {
+                {"name", barycenter.Name},
+                {"horizonId", barycenter.HorizonId}
+            };
+        }
+
+        public async Task CreateSolarSystemBarycenterNode(Barycenter solarSystemBarycenter) 
         {
             await using var session = _driver.AsyncSession();
+            Dictionary<string, object> barycenter = ConvertBarycenterObjectToDict(solarSystemBarycenter);
             var parameters = new Dictionary<string, object>
             {
-                { "props", ObjectToDictConverter.ConvertToDictionary(solarSystemBarycenter) }
+                { "barycenter", barycenter }
             };
 
-            var query = "CREATE (b:Barycenter $props) RETURN b";
+            var query = "CREATE (b:Barycenter $barycenter) RETURN b";
             var result = await session.ExecuteWriteAsync(async tx =>
                 {
                     var cursor = await tx.RunAsync(query, parameters);
@@ -32,32 +42,26 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                 });
 
 
-
-            var node = result["b"].As<INode>();
-            var name = node.Properties["Name"].As<string>();
-
-            return node.Properties["Name"].As<string>();
         }
 
 
 
-        public async Task<List<IRecord>> CreateNodesPlanetMoonSystemBarycenters(List<Dictionary<string, object>> barycenters) 
+        public async Task<List<IRecord>> CreateBarycenterNodeFromObject(Barycenter barycenter) 
         {
             await using var session = _driver.AsyncSession();
+            Dictionary<string, object> barycenterDict = ConvertBarycenterObjectToDict(barycenter);
             
             var parameters = new Dictionary<string, object> 
             {
-                {"barycenters", barycenters},
-                {"SolarSystemBarycenterName", "Solar System Barycenter"}
+                {"barycenter", barycenterDict},
+                {"solarSystemBarycenterId", 0}
             };
 
             var query = @"
-                UNWIND $barycenters AS barycenter
-                CREATE (b:Barycenter)
-                SET b = barycenter
+                CREATE (b:Barycenter $barycenter)
                 WITH b
-                MATCH (ssb:Barycenter) WHERE ssb.Name = $SolarSystemBarycenterName
-                CREATE (b)-[:BELONGS_TO]->(ssb)
+                MATCH (ssb:Barycenter) WHERE ssb.horizonId = $solarSystemBarycenterId
+                CREATE (b)-[:ORBITS]->(ssb)
                 RETURN count(*) AS count";
 
                 var result = await session.ExecuteWriteAsync(async tx =>

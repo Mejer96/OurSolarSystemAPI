@@ -4,37 +4,33 @@ using OurSolarSystemAPI.Service.NEO4J;
 namespace OurSolarSystemAPI.Controllers.NEO4J; 
 
     [ApiController]
-    [Route("scraping/neo4j")]
-    public class ScrapingControllerNEO4J : ControllerBase
+    [Route("migration/neo4j")]
+    public class MigrationControllerNEO4J : ControllerBase
     {
 
-        private readonly ScrapingServiceNEO4J _scrapingService;
-        private readonly HttpClient _httpClient;
-
-        public ScrapingControllerNEO4J(ScrapingServiceNEO4J scrapingService, HttpClient httpClient) 
+        private readonly MigrationServiceNEO4J _migrationService;
+       
+        public MigrationControllerNEO4J(MigrationServiceNEO4J migrationService) 
         {
-            _scrapingService = scrapingService;
-            _httpClient = httpClient;
-
+            _migrationService = migrationService;
         }
 
 
-        [HttpGet("scrape-barycenters")]
+        [HttpGet("migrate-barycenters")]
         public async Task<IActionResult> ScrapeBarycenters() 
         {
-            await _scrapingService.ScrapeBarycenters(_httpClient);
+            await _migrationService.MigrateBarycenters();
 
             return Ok(new
             {
                 statusCode = 200
             });
- 
         }
 
-        [HttpGet("scrape-planets")]
+        [HttpGet("migrate-planets")]
         public async Task<IActionResult> ScrapePlanets() 
         {
-            await _scrapingService.ScrapePlanets(_httpClient);
+            await _migrationService.MigratePlanets();
 
             return Ok(new
             {
@@ -43,10 +39,10 @@ namespace OurSolarSystemAPI.Controllers.NEO4J;
  
         }
 
-        [HttpGet("scrape-moons")]
+        [HttpGet("migrate-moons")]
         public async Task<IActionResult> ScrapeMoons() 
         {
-            await _scrapingService.ScrapeMoons(_httpClient);
+            await _migrationService.MigrateMoons();
 
             return Ok(new
             {
@@ -55,10 +51,10 @@ namespace OurSolarSystemAPI.Controllers.NEO4J;
  
         }
 
-        [HttpGet("scrape-satellites")]
+        [HttpGet("migrate-satellites")]
         public async Task<IActionResult> ScrapeSatelittes() 
         {
-            await _scrapingService.ScrapeArtificialSatellites(_httpClient);
+            await _migrationService.MigrateArtificialSatellites();
 
             return Ok(new
             {

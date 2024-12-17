@@ -17,13 +17,7 @@ namespace OurSolarSystemAPI.Repository.NEO4J
         {
             return new Dictionary<string, object?>
             {
-                { "id", moon.Id },
-                { "planetId", moon.PlanetId },
-                { "horizonPlanetId", moon.HorizonPlanetId },
-                { "planetName", moon.PlanetName },
                 { "horizonId", moon.HorizonId },
-                { "planet", moon.Planet },
-                { "ephemeris", moon.Ephemeris },
                 { "name", moon.Name },
                 { "meanRadius", moon.MeanRadius },
                 { "density", moon.Density },
@@ -52,55 +46,29 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             };
         }
 
-        public async Task<List<IRecord>> createMoonsNodesFromList(List<Dictionary<string, object>> moons, int planetHorizonId, string planetName) 
+
+        public async Task<List<IRecord>> createMoonNodeFromMoonObject(Moon moon, int planetHorizonId, int barycenterHorizonId) 
         {
             await using var session = _driver.AsyncSession();
+            Dictionary<string, object?> moonAttributes = ConvertMoonAttributesToDict(moon);
+            Dictionary<string, object?> orbitAttributes = ConvertMoonOrbitalAttributesToDict(moon);
+
             
             var parameters = new Dictionary<string, object> 
             {
-                {"moons", moons},
+                {"moon", moonAttributes},
+                {"orbit", orbitAttributes},
                 {"planetId", planetHorizonId},
-                {"planetName", planetName}
-            };
-
-            var query = @"
-                UNWIND $moons AS moon
-                CREATE (m:moon)
-                SET m = moon
-                WITH m
-                MATCH (b:Barycenter) WHERE b.Name = $planetName + ' Barycenter'
-                CREATE (m)-[:ORBITS]->(b)
-                MATCH (p:Planet) WHERE p.HorizonId = $planetId
-                CREATE (m)-[:PART_OF_MOON_SYSTEM_OF]->(p)
-                RETURN count(*) AS count";
-
-                var result = await session.ExecuteWriteAsync(async tx =>
-                {
-                    var cursor = await tx.RunAsync(query, parameters);
-                    return await cursor.ToListAsync();
-                });
-            return result;
-
-        }
-
-        public async Task<List<IRecord>> createMoonNodeFromMoonDict(Dictionary<string, object> moon, int planetHorizonId, string planetName) 
-        {
-            await using var session = _driver.AsyncSession();
-            
-            var parameters = new Dictionary<string, object> 
-            {
-                {"moon", moon},
-                {"planetId", planetHorizonId},
-                {"planetName", planetName}
+                {"barycenterId", barycenterHorizonId}
             };
 
             var query = @"
                 CREATE (m:Moon $moon)
-                SET m = Moon
                 WITH m
-                MATCH (b:Barycenter) WHERE b.Name = $planetName + ' Barycenter'
-                CREATE (m)-[:ORBITS]->(b)
-                MATCH (p:Planet) WHERE p.HorizonId = $planetId
+                MATCH (b:Barycenter) WHERE b.horizonId = $barycenterId
+                CREATE (m)-[:ORBITS $orbit]->(b)
+                WITH m
+                MATCH (p:Planet) WHERE p.horizonId = $planetId
                 CREATE (m)-[:PART_OF_MOON_SYSTEM_OF]->(p)
                 RETURN count(*) AS count";
 
@@ -110,7 +78,6 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                     return await cursor.ToListAsync();
                 });
             return result;
-
         }
     }
     

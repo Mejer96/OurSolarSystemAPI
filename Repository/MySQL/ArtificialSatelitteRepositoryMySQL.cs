@@ -19,6 +19,13 @@ namespace OurSolarSystemAPI.Repository.MySQL  {
             _context.SaveChanges();
         }
 
+        public async Task<List<ArtificialSatellite>> RequestAllSatellites() 
+        {
+            return await _context.ArtificialSatellites
+            .Include(s => s.Tle)
+            .ToListAsync();
+        } 
+
         public ArtificialSatellite? RequestSatelitteByNoradId(int noradId) 
         {
             return _context.ArtificialSatellites.FirstOrDefault(s => s.NoradId == noradId);

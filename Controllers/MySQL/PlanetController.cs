@@ -40,9 +40,9 @@ namespace OurSolarSystemAPI.Controllers.MySQL
         }
 
         [HttpGet("get-all-planet-locations")]
-        public IActionResult RequestAllPlanetLocations() 
+        public async Task<IActionResult> RequestAllPlanetLocations() 
         {
-            List<Planet> planets = _planetService.requestAllPlanetsWithEphemeris();
+            List<Planet> planets = await _planetService.requestAllPlanetsWithEphemeris();
 
             return Ok(planets);
         }

@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using OurSolarSystemAPI.Models;
+using OurSolarSystemAPI.Models.MongoDB;
 
 namespace OurSolarSystemAPI.Repository.MongoDB
 {
@@ -20,9 +21,15 @@ namespace OurSolarSystemAPI.Repository.MongoDB
         }
 
         public IMongoCollection<EphemerisBarycenter> GetEphemerisBarycenterCollection() =>
-    _database.GetCollection<EphemerisBarycenter>("EphemerisBarycenters");
+        _database.GetCollection<EphemerisBarycenter>("EphemerisBarycenters");
+
+        public IMongoCollection<SolarSystemBarycenterMongoDTO> GetSolarSystemBarycenterCollection() =>
+        _database.GetCollection<SolarSystemBarycenterMongoDTO>("SolarSystemBarycenters");
+
+        public IMongoCollection<BarycenterMongoDTO> GetBarycenterCollection() =>
+        _database.GetCollection<BarycenterMongoDTO>("Barycenters");
 
         public IMongoCollection<EphemerisPlanet> GetEphemerisPlanetCollection() =>
-            _database.GetCollection<EphemerisPlanet>("EphemerisPlanets");
+        _database.GetCollection<EphemerisPlanet>("EphemerisPlanets");
     }
 }

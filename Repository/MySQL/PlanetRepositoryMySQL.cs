@@ -21,11 +21,19 @@ namespace OurSolarSystemAPI.Repository.MySQL
             _context.SaveChanges();
         }
 
-        public List<Planet> requestAllPlanetsWithEphemeris() 
+        public async Task<List<Planet>> requestAllPlanetsWithEphemeris() 
         {
-            return _context.Planets
+            return await _context.Planets
             .Include(p => p.Ephemeris)
-            .ToList();
+            .ToListAsync();
+        }
+
+        public async Task<List<Planet>> requestAllPlanetsWithEphemerisAndMoons() 
+        {
+            return await _context.Planets
+            .Include(p => p.Ephemeris)
+            .Include(p => p.Moons)
+            .ToListAsync();
         }
 
         public Planet? RequestPlanetById(int horizonId) 

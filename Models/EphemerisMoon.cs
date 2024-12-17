@@ -1,25 +1,21 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace OurSolarSystemAPI.Models
 {
-    public class EphemerisMoon
+    public class EphemerisMoon : Ephemeris
     {
-        [JsonIgnore]
+        [BsonIgnore]
         public int Id { get; set; }
-        [JsonIgnore]
+        [BsonIgnore]
         public int MoonId { get; set; }
         [JsonIgnore]
-        public required Moon Moon { get; set; }
-        public required double PositionX { get; set; }
-        public required double PositionY { get; set; }
-        public required double PositionZ { get; set; }
-        public required double VelocityX { get; set; }
-        public required double VelocityY { get; set; }
-        public required double VelocityZ { get; set; }
-        public required double JulianDate { get; set; }
-        public required DateTime DateTime { get; set; }
+        [BsonIgnore]
+        public Moon Moon { get; set; }
 
-        public static EphemerisMoon convertEphemerisDictToObject(Dictionary<string, object> ephemerisDict, Moon moon)
+
+        public static EphemerisMoon ConvertEphemerisDictToObject(Dictionary<string, object> ephemerisDict, Moon moon)
         {
             return new EphemerisMoon 
             {

@@ -17,7 +17,6 @@ namespace OurSolarSystemAPI.Repository.NEO4J
         {
             var satelliteDict = new Dictionary<string, object?>();
 
-            satelliteDict["tle"] = satellite.Tle;  
             satelliteDict["launchDate"] = satellite.LaunchDate;
             satelliteDict["launchSite"] = satellite.LaunchSite;
             satelliteDict["bStarDragTerm"] = satellite.BStarDragTerm;
@@ -55,51 +54,24 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             return satelliteDict;
         }
 
-        public async Task<List<IRecord>> createSatelliteNodesFromList(List<Dictionary<string, object>> satellites, int celestialBodyHorizonId) 
+        public async Task<List<IRecord>> createSatelliteNodeFromObject(ArtificialSatellite satellite, int celestialBodyHorizonId) 
         {
             await using var session = _driver.AsyncSession();
+            Dictionary<string, object?> satelliteAttributes = ConvertSatelliteAttributesToDict(satellite);
+            Dictionary<string, object?> orbitAttributes = ConvertSatelliteOrbitalAttributesToDict(satellite);
             
             var parameters = new Dictionary<string, object> 
             {
-                {"satelittes", satellites},
+                {"satellite", satelliteAttributes},
+                {"orbit", orbitAttributes},
                 {"celestialBodyId", celestialBodyHorizonId}
             };
 
             var query = @"
-                UNWIND $satellites AS satellite
-                CREATE (s:satellite)
-                SET s = satellite
+                CREATE (s:Satellite $satellite)
                 WITH s
-                MATCH (p:Planet) WHERE p.HorizonId = $celestialBodyId
-                CREATE (s)-[:ORBITS]->(p)
-                RETURN count(*) AS count";
-
-                var result = await session.ExecuteWriteAsync(async tx =>
-                {
-                    var cursor = await tx.RunAsync(query, parameters);
-                    return await cursor.ToListAsync();
-                });
-            return result;
-
-        }
-
-        public async Task<List<IRecord>> createSatelliteNodeFromObject(List<Dictionary<string, object>> satellites, int celestialBodyHorizonId) 
-        {
-            await using var session = _driver.AsyncSession();
-            
-            var parameters = new Dictionary<string, object> 
-            {
-                {"satelittes", satellites},
-                {"celestialBodyId", celestialBodyHorizonId}
-            };
-
-            var query = @"
-                UNWIND $satellites AS satellite
-                CREATE (s:satellite)
-                SET s = satellite
-                WITH s
-                MATCH (p:Planet) WHERE p.HorizonId = $celestialBodyId
-                CREATE (s)-[:ORBITS]->(p)
+                MATCH (p:Planet) WHERE p.horizonId = $celestialBodyId
+                CREATE (s)-[:ORBITS $orbit]->(p)
                 RETURN count(*) AS count";
 
                 var result = await session.ExecuteWriteAsync(async tx =>

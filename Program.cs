@@ -6,7 +6,8 @@ using OurSolarSystemAPI.Repository.MySQL;
 using OurSolarSystemAPI.Repository.NEO4J;
 using OurSolarSystemAPI.Service.MySQL;
 using OurSolarSystemAPI.Service.NEO4J;
-using OurSolarSystemAPI.Service;
+using OurSolarSystemAPI.Service.MongoDB;
+// using OurSolarSystemAPI.Service;
 using Microsoft.OpenApi.Models;
 using Neo4j.Driver;
 using OurSolarSystemAPI.Repository;
@@ -55,44 +56,41 @@ builder.Services.AddAuthorization(options =>
 });
 
 // Add services to the container.
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<ScrapingService>();
 
+// MySQL
 builder.Services.AddDbContext<OurSolarSystemContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 2)) // Adjust based on your MySQL version
     )
 );
-
-// Register HttpClient
-builder.Services.AddHttpClient();
-
-// Register other services
 builder.Services.AddScoped<ScrapingServiceMySQL>();
-builder.Services.AddScoped<ScrapingServiceNEO4J>();
 builder.Services.AddScoped<PlanetServiceMySQL>();
-builder.Services.AddScoped<ScrapingService>();
 builder.Services.AddScoped<BarycenterRepositoryMySQL>();
-builder.Services.AddScoped<BarycenterRepositoryNEO4J>();
 builder.Services.AddScoped<PlanetRepositoryMySQL>();
 builder.Services.AddScoped<MoonRepositoryMySQL>();
+builder.Services.AddScoped<ArtificialSatelliteRepositoryMySQL>();
+builder.Services.AddScoped<UserRepositoryMySQL>();
+
+// NEO4J
+builder.Services.AddSingleton(GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "Password123")));
+builder.Services.AddScoped<BarycenterRepositoryNEO4J>();
 builder.Services.AddScoped<MoonRepositoryNEO4J>();
 builder.Services.AddScoped<PlanetRepositoryNEO4J>();
-builder.Services.AddScoped<ArtificialSatelliteRepositoryMySQL>();
+builder.Services.AddScoped<MigrationServiceNEO4J>();
 builder.Services.AddScoped<ArtificialSatelliteRepositoryNEO4J>();
-builder.Services.AddScoped<UserRepositoryMySQL>();
 builder.Services.AddScoped<EphemerisRepositoryNEO4J>();
-builder.Services.AddSingleton(GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "Password123")));
-builder.Services.AddScoped<BarycenterRepository>();
-builder.Services.AddScoped<PlanetRepository>();
-builder.Services.AddScoped<ArtificialSatelliteRepository>();
-builder.Services.AddScoped<ScrapingService>();
 
-//mongo
+
+// MongoDB
 builder.Services.AddSingleton<MongoDbContext>();
-builder.Services.AddScoped<MongoBarycenterRepository>();
-builder.Services.AddScoped<MongoPlanetRepository>();
-builder.Services.AddScoped<MongoArtificialSatelliteRepository>();
-builder.Services.AddScoped<MongoScrapingService>();
+builder.Services.AddScoped<BarycenterRepositoryMongoDB>();
+builder.Services.AddScoped<PlanetRepositoryMongoDB>();
+builder.Services.AddScoped<ArtificialSatelliteRepositoryMongoDB>();
+builder.Services.AddScoped<EphemerisRepositoryMongoDB>();
+builder.Services.AddScoped<MigrationServiceMongoDB>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
