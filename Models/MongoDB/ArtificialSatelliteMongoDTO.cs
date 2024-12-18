@@ -7,7 +7,7 @@ namespace OurSolarSystemAPI.Models.MongoDB
     {
         [BsonId]
         public ObjectId Id {get; set; }
-        public List<TleArtificialSatellite>? Tle { get; set; }
+        public List<TleArtificialSatelliteMongoDTO> Tle { get; set; }
         public string? LaunchDate { get; set; }
         public string? LaunchSite { get; set; }
         public double? BStarDragTerm { get; set; }
@@ -27,14 +27,16 @@ namespace OurSolarSystemAPI.Models.MongoDB
 
         public static ArtificialSatelliteMongoDTO ConvertToArtificialSatelliteMongoDTO(ArtificialSatellite satellite)
         {
-            if (satellite == null)
+            var tleDTOs = new List<TleArtificialSatelliteMongoDTO>();
+
+            foreach (var tle in satellite.Tle) 
             {
-                throw new ArgumentNullException(nameof(satellite));
+                tleDTOs.Add(TleArtificialSatelliteMongoDTO.ConvertToDto(tle));
             }
 
             return new ArtificialSatelliteMongoDTO
             {
-                Tle = satellite.Tle,
+                Tle = tleDTOs,
                 LaunchDate = satellite.LaunchDate,
                 LaunchSite = satellite.LaunchSite,
                 BStarDragTerm = satellite.BStarDragTerm,

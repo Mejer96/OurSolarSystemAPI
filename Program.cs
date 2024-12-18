@@ -88,6 +88,7 @@ builder.Services.AddScoped<EphemerisRepositoryNEO4J>();
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddScoped<BarycenterRepositoryMongoDB>();
 builder.Services.AddScoped<PlanetRepositoryMongoDB>();
+builder.Services.AddScoped<MoonRepositoryMongoDB>();
 builder.Services.AddScoped<ArtificialSatelliteRepositoryMongoDB>();
 builder.Services.AddScoped<EphemerisRepositoryMongoDB>();
 builder.Services.AddScoped<MigrationServiceMongoDB>();

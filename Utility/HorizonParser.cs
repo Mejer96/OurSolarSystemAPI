@@ -1,5 +1,7 @@
 using OurSolarSystemAPI.Models;
 using System.Text.RegularExpressions;
+using System.Globalization;
+
 namespace OurSolarSystemAPI.Utility 
 {
     public class HorizonParser
@@ -63,6 +65,128 @@ namespace OurSolarSystemAPI.Utility
             return ephemerisData;
         }
 
+                public List<Dictionary<string, object>> ExtractEphemerisTest(string apiResponse)
+        {
+            List<Dictionary<string, object>> ephemerisData = new();
+
+            Regex regexEphemerisSection = new Regex(@"\$\$SOE(.*?)\$\$EOE", RegexOptions.Singleline);
+            Regex regexjulianDate = new Regex(@"(.*?)= A\.D\.");
+            Regex regexdate = new Regex(@"= A\.D\. (.*?) 00:00");
+    
+            Regex regexPostionX = new Regex(@"X =(.*?)Y");
+            Regex regexPostionY = new Regex(@"Y =(.*?)Z");
+            Regex regexPostionZ = new Regex(@"Z =\s*(.+)");
+
+            Regex regexVelocityX = new Regex(@"VX=(.*?)VY");
+            Regex regexVelocityY = new Regex(@"VY=(.*?)VZ");
+            Regex regexVelocityZ = new Regex(@"VZ=\s*(.+)");
+
+
+            string ephemerisSection = regexEphemerisSection.Match(apiResponse).Groups[0].Value;
+            MatchCollection julianDates = regexjulianDate.Matches(ephemerisSection);
+            MatchCollection dates = regexdate.Matches(ephemerisSection);
+
+            MatchCollection positionsX = regexPostionX.Matches(ephemerisSection);
+            MatchCollection positionsY = regexPostionY.Matches(ephemerisSection);
+            MatchCollection positionsZ = regexPostionZ.Matches(ephemerisSection);
+
+            MatchCollection velocitiesX = regexVelocityX.Matches(ephemerisSection);
+            MatchCollection velocitiesY = regexVelocityY.Matches(ephemerisSection);
+            MatchCollection velocitiesZ = regexVelocityZ.Matches(ephemerisSection);
+
+            for (int i = 0; i < julianDates.Count; i++)
+            {
+                var positionX = positionsX[i].Groups[1].Value.Trim();
+                var positionY = positionsY[i].Groups[1].Value.Trim();
+                var positionZ = positionsZ[i].Groups[1].Value.Trim();
+
+                var velocityX = velocitiesX[i].Groups[1].Value.Trim();
+                var velocityY = velocitiesX[i].Groups[1].Value.Trim();
+                var velocityZ = velocitiesX[i].Groups[1].Value.Trim();
+
+                string fullDate = dates[i].Groups[1].Value.Trim();
+                DateTime datetime = ParseEphimerisDateToDateTime(fullDate);
+
+                 var ephemerisDict = new Dictionary<string, object>
+                {
+                    { "julianDate", julianDates[i].Groups[1].Value.Trim() },
+                    { "dateTime", datetime },
+                    { "positionX", positionX },
+                    { "positionY", positionY },
+                    { "positionZ", positionZ },
+                    { "velocityX", velocityX },
+                    { "velocityY", velocityY },
+                    { "velocityZ", velocityZ }
+                };
+                ephemerisData.Add(ephemerisDict);
+
+            }
+            return ephemerisData;
+        }
+
+                        public List<Dictionary<string, object>> ExtractEphemerisTest2(string apiResponse)
+        {
+            List<Dictionary<string, object>> ephemerisData = new();
+
+            Regex regexEphemerisSection = new Regex(@"\$\$SOE(.*?)\$\$EOE", RegexOptions.Singleline);
+            Regex regexjulianDate = new Regex(@"(.*?)= A\.D\.");
+            Regex regexdate = new Regex(@"= A\.D\. (.*?) 00:00");
+    
+            Regex regexPostionX = new Regex(@"X =(.*?)Y");
+            Regex regexPostionY = new Regex(@"Y =(.*?)Z");
+            Regex regexPostionZ = new Regex(@"Z =\s*(.+)");
+
+            Regex regexVelocityX = new Regex(@"VX=(.*?)VY");
+            Regex regexVelocityY = new Regex(@"VY=(.*?)VZ");
+            Regex regexVelocityZ = new Regex(@"VZ=\s*(.+)");
+
+
+            string ephemerisSection = regexEphemerisSection.Match(apiResponse).Groups[0].Value;
+            MatchCollection julianDates = regexjulianDate.Matches(ephemerisSection);
+            MatchCollection dates = regexdate.Matches(ephemerisSection);
+
+            MatchCollection positionsX = regexPostionX.Matches(ephemerisSection);
+            MatchCollection positionsY = regexPostionY.Matches(ephemerisSection);
+            MatchCollection positionsZ = regexPostionZ.Matches(ephemerisSection);
+
+            MatchCollection velocitiesX = regexVelocityX.Matches(ephemerisSection);
+            MatchCollection velocitiesY = regexVelocityY.Matches(ephemerisSection);
+            MatchCollection velocitiesZ = regexVelocityZ.Matches(ephemerisSection);
+
+            for (int i = 0; i < julianDates.Count; i++)
+            {
+                Double.Parse("1.234567E-06", NumberStyles.Float, CultureInfo.InvariantCulture);
+                // Parsing positions
+                // Parsing positions
+                double positionX = Double.Parse(positionsX[i].Groups[1].Value.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture);
+                double positionY = Double.Parse(positionsY[i].Groups[1].Value.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture);
+                double positionZ = Double.Parse(positionsZ[i].Groups[1].Value.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture);
+
+                // Parsing velocities
+                double velocityX = Double.Parse(velocitiesX[i].Groups[1].Value.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture);
+                double velocityY = Double.Parse(velocitiesY[i].Groups[1].Value.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture);
+                double velocityZ = Double.Parse(velocitiesZ[i].Groups[1].Value.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture);
+
+                string fullDate = dates[i].Groups[1].Value.Trim();
+                DateTime datetime = ParseEphimerisDateToDateTime(fullDate);
+
+                 var ephemerisDict = new Dictionary<string, object>
+                {
+                    { "julianDate", julianDates[i].Groups[1].Value.Trim() },
+                    { "dateTime", datetime },
+                    { "positionX", positionX },
+                    { "positionY", positionY },
+                    { "positionZ", positionZ },
+                    { "velocityX", velocityX },
+                    { "velocityY", velocityY },
+                    { "velocityZ", velocityZ }
+                };
+                ephemerisData.Add(ephemerisDict);
+
+            }
+            return ephemerisData;
+        }
+
         public DateTime ParseEphimerisDateToDateTime(string ephemerisDate) 
         {
             var regexEphmerisData = new Regex(@"^(\d{4})-([a-zA-Z]{3})-(\d{2})$");
@@ -105,6 +229,7 @@ namespace OurSolarSystemAPI.Utility
             Regex regexInclination = new Regex(@"Inclination.*?~\s*(.+)");
 
             string moonName = regexMoonName.Match(apiResponse).Groups[1].Value.Trim();
+            moonName = Regex.Replace(moonName, @"\s\(\d{3}\)", "").ToLower();
             string moonAttributes = regexAllMoonAttributes.Match(apiResponse).Groups[0].Value.Trim();
             string meanRadius = regexMeanRadius.Match(moonAttributes).Groups[1].Value.Trim();
             string density = regexDensity.Match(moonAttributes).Groups[1].Value.Trim();
@@ -119,17 +244,10 @@ namespace OurSolarSystemAPI.Utility
             return new Moon 
             { 
                 Name = moonName,
-                Density = density,
-                MeanRadius = meanRadius,
-                GeometricAlbedo = geometricAlbedo,
-                SemiMajorAxis = semiMajorAxis,
-                OrbitalPeriod = orbitalPeriod,
-                Gm = gm,
-                Eccentricity = eccentricity,
-                RotationalPeriod = rotationalPeriod,
-                Inclination = inclination
             };
         }
+
+
 
     }
 }

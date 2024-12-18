@@ -38,6 +38,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
 
         public async Task CreateMoonEphemerisManyAsync(List<EphemerisMongoDTO> ephemeris)
         {
+
             await _ephemerisMoonCollection.InsertManyAsync(ephemeris);
         }
 

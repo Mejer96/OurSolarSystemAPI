@@ -4,11 +4,31 @@ namespace OurSolarSystemAPI.Service
 {
     public class ScrapingService 
     {
+        public async Task<Star> ScrapeSun(HttpClient httpClient) 
+        {
+            var horizonScraper = new HorizonHardcodedData();
+            var horizonParser = new HorizonParser();
+            Star sun = horizonScraper.SunData();
+            var ephemeris = new List<EphemerisSun>();
+            string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{sun.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-02-01";
+            string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
+            List<Dictionary<string, object>> vectors = horizonParser.ExtractEphemeris(apiResponse);
+
+            foreach (var vector in vectors) 
+            {
+                ephemeris.Add(EphemerisSun.ConvertEphemerisDictToObject(vector, sun));
+            }
+            
+            sun.Ephemeris = ephemeris;
+            return sun;
+        }
+
         public async Task<List<Barycenter>> ScrapeBarycenters(HttpClient httpClient) 
         {
             var horizonScraper = new HorizonHardcodedData();
             var horizonParser = new HorizonParser();
             List<Barycenter> barycenters = horizonScraper.BarycenterData();
+
 
             foreach (var barycenter in barycenters) 
             {
@@ -24,6 +44,25 @@ namespace OurSolarSystemAPI.Service
                 barycenter.Ephemeris = ephemeris;
             }
             return barycenters;
+        }
+
+        public async Task<Dictionary<string, object>> ScrapeBarycentersTest(HttpClient httpClient) 
+        {
+            var horizonScraper = new HorizonHardcodedData();
+            var horizonParser = new HorizonParser();
+            List<Barycenter> barycenters = horizonScraper.BarycenterData();
+            var dict = new Dictionary<string, object>();
+
+            foreach (var barycenter in barycenters) 
+            {
+                var ephemeris = new List<EphemerisBarycenter>();
+                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{barycenter.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-02-01";
+                string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
+                List<Dictionary<string, object>> vectors = horizonParser.ExtractEphemerisTest2(apiResponse);
+                dict.Add(barycenter.Name, vectors);
+           
+            }
+            return dict;
         }
 
         public async Task<List<Planet>> ScrapePlanets(HttpClient httpClient) 

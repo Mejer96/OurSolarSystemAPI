@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace OurSolarSystemAPI.Models
 {
@@ -16,6 +17,7 @@ namespace OurSolarSystemAPI.Models
         public double? MeanAnomaly { get; set; }
         public int? OrbitNumber { get; set; }
         public string? Source { get; set; }
+        [Required]
         public int NoradId { get; set; }
         public string? NssdcId { get; set; }
         public string? Perigee { get; set; }

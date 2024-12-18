@@ -2,77 +2,57 @@
 
 namespace OurSolarSystemAPI.Models
 {
-    public class Star(
-        int id,
-        string gravitationalParameter,
-        string mass,
-        string volumeMeanRadius,
-        string volume,
-        string solarRadius,
-        string radius,
-        string angularDiameter,
-        string photosphereTemperature,
-        string photosphericDepth,
-        string chromosphericDepth,
-        string flatness,
-        string surfaceGravity,
-        string escapeSpeed,
-        string rightAscension,
-        string declination,
-        string obliquityToEcliptic,
-        string solarConstantOneAu,
-        string luminosity,
-        string massEnergyConversionRate,
-        string effectiveTemperature,
-        string sunspotCycle,
-        string cycle24SunspotMinimum,
-        int barycenterId)
+    public class Star
     {
-        [JsonIgnore]
-        public int id { get; set; } = id;
-        public string gravitationalParameter { get; set; } = gravitationalParameter;
+        public int Id { get; set; }
+        public int SolarSystemBarycenterId { get; set;}
+        public int SolarSystemBarycenterHorizonId { get; set;}
+        public SolarSystemBarycenter SolarSystemBarycenter { get; set; }
+        public int HorizonId { get; set; }
+        public List<EphemerisSun>? Ephemeris { get; set; }
+        public double GravitationalParameter { get; set; }
 
-        public string mass { get; set; } = mass;
+        public double Mass { get; set; }
 
-        public string volumeMeanRadius { get; set; } = volumeMeanRadius;
+        public double VolumeMeanRadius { get; set; }
 
-        public string volume { get; set; } = volume;
+        public double Volume { get; set; }
 
-        public string solarRadius { get; set; } = solarRadius;
-        public string radius { get; set; } = radius;
+        public double SolarRadius { get; set; }
+        public double Radius { get; set; }
 
-        public string angularDiameter { get; set; } = angularDiameter;
+        public double AngularDiameter { get; set; }
 
-        public string photosphereTemperature { get; set; } = photosphereTemperature;
+        public double PhotosphereTemperatureTop { get; set; }
+        public double PhotosphereTemperatureBottom { get; set; }
 
-        public string photosphericDepth { get; set; } = photosphericDepth;
+        public double PhotosphericDepth { get; set; }
 
-        public string chromosphericDepth { get; set; } = chromosphericDepth;
+        public double ChromosphericDepth { get; set; }
 
-        public string flatness { get; set; } = flatness;
+        public double Flatness { get; set; }
 
-        public string surfaceGravity { get; set; } = surfaceGravity;
+        public double SurfaceGravity { get; set; }
 
-        public string escapeSpeed { get; set; } = escapeSpeed;
+        public double EscapeSpeed { get; set; }
 
-        public string rightAscension { get; set; } = rightAscension;
+        public double RightAscension { get; set; }
 
-        public string declination { get; set; } = declination;
+        public double Declination { get; set; }
 
-        public string obliquityToEcliptic { get; set; } = obliquityToEcliptic;
+        public double ObliquityToEcliptic { get; set; }
 
-        public string solarConstantOneAu { get; set; } = solarConstantOneAu;
+        public double SolarConstantOneAu { get; set; }
 
-        public string luminosity { get; set; } = luminosity;
+        public double Luminosity { get; set; }
 
-        public string massEnergyConversionRate { get; set; } = massEnergyConversionRate;
+        public double MassEnergyConversionRate { get; set; }
 
-        public string effectiveTemperature { get; set; } = effectiveTemperature;
+        public double EffectiveTemperature { get; set; }
 
-        public string sunspotCycle { get; set; } = sunspotCycle;
+        public double SunspotCycle { get; set; }
 
-        public string cycle24SunspotMinimum { get; set; } = cycle24SunspotMinimum;
-        //foreign key
-        public int barycenterId { get; set; } = barycenterId;
+        public double Cycle24SunspotMinimum { get; set; }
+ 
     }
 }

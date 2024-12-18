@@ -19,45 +19,22 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             {
                 { "horizonId", moon.HorizonId },
                 { "name", moon.Name },
-                { "meanRadius", moon.MeanRadius },
-                { "density", moon.Density },
-                { "gm", moon.Gm },
-                { "semiMajorAxis", moon.SemiMajorAxis },
-                { "gravitationalParameter", moon.GravitationalParameter },
-                { "geometricAlbedo", moon.GeometricAlbedo },
-                { "orbitalPeriod", moon.OrbitalPeriod },
-                { "eccentricity", moon.Eccentricity },
-                { "rotationalPeriod", moon.RotationalPeriod },
-                { "inclination", moon.Inclination }
             };
         }
 
-        public Dictionary<string, object?> ConvertMoonOrbitalAttributesToDict(Moon moon)
-        {
-            return new Dictionary<string, object?>
-            {
-                { "semiMajorAxis", moon.SemiMajorAxis },
-                { "gravitationalParameter", moon.GravitationalParameter },
-                { "geometricAlbedo", moon.GeometricAlbedo },
-                { "orbitalPeriod", moon.OrbitalPeriod },
-                { "eccentricity", moon.Eccentricity },
-                { "rotationalPeriod", moon.RotationalPeriod },
-                { "inclination", moon.Inclination }
-            };
-        }
+
 
 
         public async Task<List<IRecord>> createMoonNodeFromMoonObject(Moon moon, int planetHorizonId, int barycenterHorizonId) 
         {
             await using var session = _driver.AsyncSession();
             Dictionary<string, object?> moonAttributes = ConvertMoonAttributesToDict(moon);
-            Dictionary<string, object?> orbitAttributes = ConvertMoonOrbitalAttributesToDict(moon);
+       
 
             
             var parameters = new Dictionary<string, object> 
             {
                 {"moon", moonAttributes},
-                {"orbit", orbitAttributes},
                 {"planetId", planetHorizonId},
                 {"barycenterId", barycenterHorizonId}
             };
@@ -66,7 +43,7 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                 CREATE (m:Moon $moon)
                 WITH m
                 MATCH (b:Barycenter) WHERE b.horizonId = $barycenterId
-                CREATE (m)-[:ORBITS $orbit]->(b)
+                CREATE (m)-[:ORBITS]->(b)
                 WITH m
                 MATCH (p:Planet) WHERE p.horizonId = $planetId
                 CREATE (m)-[:PART_OF_MOON_SYSTEM_OF]->(p)

@@ -10,6 +10,7 @@ namespace OurSolarSystemAPI.Models
 {
     public abstract class Ephemeris
     {
+        public int Id { get; set;}
         [NotMapped]
         public int HorizonId { get; set;}
         public required double PositionX { get; set; }
@@ -21,13 +22,10 @@ namespace OurSolarSystemAPI.Models
         public required double JulianDate { get; set; }
         public required DateTime DateTime { get; set; }
         [NotMapped]
-        [BsonIgnore]
         public double ScaledPositionX { get; set; }
         [NotMapped]
-        [BsonIgnore]
         public double ScaledPositionY { get; set; }
         [NotMapped]
-        [BsonIgnore]
         public double ScaledPositionZ { get; set; }
 
         public Dictionary<string, object> ConvertObjectToDictNEO4J() 

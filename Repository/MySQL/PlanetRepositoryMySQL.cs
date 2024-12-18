@@ -20,7 +20,32 @@ namespace OurSolarSystemAPI.Repository.MySQL
             _context.Planets.Add(planet);
             _context.SaveChanges();
         }
+        
+        public void CreateSun(Star sun) 
+        {
+            _context.Sun.Add(sun);
+            _context.SaveChanges();
+        }
 
+        public async Task<Star> RequestSunWithEphemeris() 
+        {
+            return await _context.Sun
+            .Include(s => s.Ephemeris)
+            .FirstOrDefaultAsync(s => s.HorizonId == 10);
+        }
+
+        public async Task<List<Planet>> requestAllPlanets() 
+        {
+            return await _context.Planets
+            .ToListAsync();
+        }
+
+        public async Task<List<Planet>> requestAllPlanetsWithMoons() 
+        {
+            return await _context.Planets
+            .Include(p => p.Moons)
+            .ToListAsync();
+        }
         public async Task<List<Planet>> requestAllPlanetsWithEphemeris() 
         {
             return await _context.Planets
@@ -34,6 +59,15 @@ namespace OurSolarSystemAPI.Repository.MySQL
             .Include(p => p.Ephemeris)
             .Include(p => p.Moons)
             .ToListAsync();
+        }
+
+        public async Task<List<Planet>> requestAllPlanetsWithEphemerisAndMoonsWithEphemeris() 
+        {
+            return await _context.Planets
+                .Include(p => p.Ephemeris)  // Include Ephemeris of the Planet
+                .Include(p => p.Moons)      // Include Moons navigation property
+                    .ThenInclude(m => m.Ephemeris)  // Include Ephemeris for each Moon
+                .ToListAsync();
         }
 
         public Planet? RequestPlanetById(int horizonId) 

@@ -23,6 +23,9 @@ namespace OurSolarSystemAPI.Repository.MongoDB
         public IMongoCollection<EphemerisBarycenter> GetEphemerisBarycenterCollection() =>
         _database.GetCollection<EphemerisBarycenter>("EphemerisBarycenters");
 
+        public IMongoCollection<MoonMongoDTOWithId> GetMoonCollection() =>
+        _database.GetCollection<MoonMongoDTOWithId>("Moons");
+
         public IMongoCollection<SolarSystemBarycenterMongoDTO> GetSolarSystemBarycenterCollection() =>
         _database.GetCollection<SolarSystemBarycenterMongoDTO>("SolarSystemBarycenters");
 

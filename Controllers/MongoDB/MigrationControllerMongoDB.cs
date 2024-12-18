@@ -27,6 +27,17 @@ namespace OurSolarSystemAPI.Controllers.NEO4J;
             });
         }
 
+        [HttpGet("migrate-sun")]
+        public async Task<IActionResult> ScrapeSun() 
+        {
+            await _migrationService.MigrateSun();
+
+            return Ok(new
+            {
+                statusCode = 200
+            });
+        }
+
         [HttpGet("migrate-planets")]
         public async Task<IActionResult> ScrapePlanets() 
         {

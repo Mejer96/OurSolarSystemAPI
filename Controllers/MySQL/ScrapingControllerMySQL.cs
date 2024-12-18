@@ -17,11 +17,33 @@ public class ScrapingControllerMySQL : ControllerBase
         _context = context;
         _httpClient = httpClient;
     }
+    [HttpGet("scrape-barycenters-test")]
+    public async Task<IActionResult> ScrapeAndAddBarycentersToDBTest()
+    {
+        var dict = await _scrapingService.ScrapeBarycentersTest(_httpClient);
+
+        return Ok(new
+            {
+                dict
+            });
+    }
+
 
     [HttpGet("scrape-barycenters")]
     public async Task<IActionResult> ScrapeAndAddBarycentersToDB()
     {
         await _scrapingService.ScrapeBarycenters(_httpClient);
+
+        return Ok(new
+            {
+                statusCode = 200
+            });
+    }
+
+    [HttpGet("scrape-sun")]
+    public async Task<IActionResult> ScrapeAndAddSunToDB()
+    {
+        await _scrapingService.ScrapeSun(_httpClient);
 
         return Ok(new
             {

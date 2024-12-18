@@ -27,17 +27,35 @@ namespace OurSolarSystemAPI.Service.MySQL
 
         public async Task ScrapeBarycenters(HttpClient httpClient) 
         {
+            var solarSystemBaryCenter = new SolarSystemBarycenter();
+            solarSystemBaryCenter.HorizonId = 0;
+            solarSystemBaryCenter.Name = "solar system barycenter";
             List<Barycenter> barycenters = await _scrapingService.ScrapeBarycenters(httpClient);
+            await _barycenterRepo.CreateSolarSystemBarycenter(solarSystemBaryCenter);
 
             foreach (Barycenter barycenter in barycenters) 
             {
-                await _barycenterRepo.CreateBarycenter(barycenter);
+                await _barycenterRepo.AddBarycenterToExistingSolarSystemBarycenter(barycenter);
             }
         }
+
+        public async Task<Dictionary<string, object>> ScrapeBarycentersTest(HttpClient httpClient) 
+        {
+            return await _scrapingService.ScrapeBarycentersTest(httpClient);
+        }
+
+        public async Task ScrapeSun(HttpClient httpClient) 
+        {
+            Star sun = await _scrapingService.ScrapeSun(httpClient);
+            List<Planet> planets = await _scrapingService.ScrapePlanets(httpClient);
+            await _barycenterRepo.AddSunToExistingSolarSystemBarycenter(sun);
+        }
+
 
         public async Task ScrapePlanets(HttpClient httpClient) 
         {
             List<Planet> planets = await _scrapingService.ScrapePlanets(httpClient);
+
 
             foreach (Planet planet in planets) 
             {

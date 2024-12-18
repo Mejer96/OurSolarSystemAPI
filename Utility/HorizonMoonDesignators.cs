@@ -145,7 +145,6 @@ namespace OurSolarSystemAPI.Utility
                 new HorizonMoonDesignators(632, "Methone", "SXXXII"),
                 new HorizonMoonDesignators(633, "Pallene", "SXXXIII"),
                 new HorizonMoonDesignators(634, "Polydeuces", "SXXXIV"),
-                new HorizonMoonDesignators(635, "Daphnis", "SXXXV"),
                 new HorizonMoonDesignators(636, "Aegir", "SXXXVI"),
                 new HorizonMoonDesignators(637, "Bebhionn", "SXXXVII"),
                 new HorizonMoonDesignators(638, "Bergelmir", "SXXXVIII"),

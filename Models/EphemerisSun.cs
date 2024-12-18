@@ -7,18 +7,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OurSolarSystemAPI.Models
 {
-    public class EphemerisPlanet : Ephemeris
+    public class EphemerisSun : Ephemeris
     {
         public int Id { get; set; }
-        public int PlanetId { get; set; }
+        public int SunId { get; set; }
         [JsonIgnore]
-        public Planet Planet { get; set; }
+        public Star Sun { get; set; }
 
-        public static EphemerisPlanet ConvertEphemerisDictToObject(Dictionary<string, object> ephemerisDict, Planet planet)
+        public static EphemerisSun ConvertEphemerisDictToObject(Dictionary<string, object> ephemerisDict, Star sun)
         {
-            return new EphemerisPlanet 
+            return new EphemerisSun 
             {
-                Planet = planet,
+                Sun = sun,
                 PositionX = Convert.ToDouble(ephemerisDict["positionX"]),
                 PositionY = Convert.ToDouble(ephemerisDict["positionY"]),
                 PositionZ = Convert.ToDouble(ephemerisDict["positionZ"]),

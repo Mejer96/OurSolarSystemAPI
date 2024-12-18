@@ -1,6 +1,7 @@
 using Neo4j.Driver;
 using Neo4j.Driver.Mapping;
 using OurSolarSystemAPI.Models;
+using System.Text.Json; // Or Newtonsoft.Json
 
 namespace OurSolarSystemAPI.Repository.NEO4J 
 {
@@ -59,6 +60,7 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                 { "solarConstantMean", planet.SolarConstantMean }
             };
         }
+
         public async Task<IRecord> CreatePlanetNode(Planet planet)
         {
             await using var session = _driver.AsyncSession();
@@ -87,6 +89,109 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             });
 
             return result;
+        }
+
+        public async Task<string> FetchEphemerisByHorizonIdAndDate(int horizonId, DateTime date)
+        {
+            const string query = @"
+                MATCH (p:Planet {horizonId: $horizonId})-[:HAS_LOCATION]->(e:Ephemeris)
+                WHERE e.date = $date
+                RETURN e";
+
+            await using var session = _driver.AsyncSession();
+
+            try
+            {
+                var result = await session.ExecuteReadAsync(async tx =>
+                {
+                    var cursor = await tx.RunAsync(query, new { horizonId, date = date.ToString("yyyy-MM-dd") });
+                    var record = await cursor.SingleAsync(); // Avoid exceptions if no match
+
+                    var properties = record?["e"].As<INode>()?.Properties;
+
+                    if (properties != null)
+                    {
+                     
+                        return JsonSerializer.Serialize(properties); 
+                        
+                    }
+
+                    return null;
+                });
+
+                return result;
+            }
+            finally
+            {
+                await session.CloseAsync();
+            }
+        }
+
+        public async Task<string> FetchAllEphemerisByHorizonId(int horizonId)
+        {
+            const string query = @"
+                MATCH (p:Planet {horizonId: $horizonId})-[:HAS_LOCATION]->(e:Ephemeris)
+                RETURN e";
+
+            await using var session = _driver.AsyncSession();
+
+            try
+            {
+                var result = await session.ExecuteReadAsync(async tx =>
+                {
+                    var cursor = await tx.RunAsync(query, new { horizonId });
+                    var nodes = await cursor.ToListAsync(record =>
+                    {
+                        var node = record["e"].As<INode>();
+                        return node.Properties;
+                    });
+
+                    // Convert the list of properties to a JSON array
+                    return JsonSerializer.Serialize(nodes); // Or JsonConvert.SerializeObject(nodes) for Newtonsoft.Json
+                });
+
+                return result;
+            }
+            finally
+            {
+                await session.CloseAsync();
+            }
+        }
+
+        public async Task<string> FetchEphemerisByNameAndDate(string name, DateTime date)
+        {
+            const string query = @"
+                MATCH (p:Planet {horizonId: $horizonId})-[:HAS_LOCATION]->(e:Ephemeris)
+                WHERE e.date = $date
+                RETURN e";
+
+            await using var session = _driver.AsyncSession();
+
+            try
+            {
+                var result = await session.ExecuteReadAsync(async tx =>
+                {
+                    var cursor = await tx.RunAsync(query, new { name, date = date.ToString("yyyy-MM-dd") });
+                    var record = await cursor.SingleAsync(); 
+
+                    var properties = record?["e"].As<INode>()?.Properties;
+
+                    if (properties != null)
+                    {
+                     
+                        return JsonSerializer.Serialize(properties); 
+                        
+                    }
+
+                    return null; 
+                });
+
+                return result;
+            }
+            finally
+            {
+                await session.CloseAsync();
+            }
         }
     }
     
