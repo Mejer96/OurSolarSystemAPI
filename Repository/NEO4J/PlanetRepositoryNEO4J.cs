@@ -94,9 +94,9 @@ namespace OurSolarSystemAPI.Repository.NEO4J
         public async Task<string> FetchEphemerisByHorizonIdAndDate(int horizonId, DateTime date)
         {
             const string query = @"
-                MATCH (p:Planet {horizonId: $horizonId})-[:HAS_LOCATION]->(e:Ephemeris)
-                WHERE e.date = $date
-                RETURN e";
+                MATCH (p:Planet {horizonId: 399})-[:HAS_LOCATION]->(e:Ephemeris) 
+                WHERE e.DateTime.year = 2024 AND e.DateTime.month = 1 AND e.DateTime.day = 1
+                RETURN p as planet, collect(e) as ephemeris";
 
             await using var session = _driver.AsyncSession();
 
@@ -161,9 +161,9 @@ namespace OurSolarSystemAPI.Repository.NEO4J
         public async Task<string> FetchEphemerisByNameAndDate(string name, DateTime date)
         {
             const string query = @"
-                MATCH (p:Planet {horizonId: $horizonId})-[:HAS_LOCATION]->(e:Ephemeris)
-                WHERE e.date = $date
-                RETURN e";
+                MATCH (p:Planet {name: $name})-[:HAS_LOCATION]->(e:Ephemeris) 
+                WHERE e.DateTime.year = 2024 AND e.DateTime.month = 1 AND e.DateTime.day = 1
+                RETURN p as planet, collect(e) as ephemeris";
 
             await using var session = _driver.AsyncSession();
 
