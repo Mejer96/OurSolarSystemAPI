@@ -23,9 +23,9 @@ namespace OurSolarSystemAPI.Controllers.MySQL
         }
 
         [HttpGet("get-user-by-username")]
-        public async Task<IActionResult> RequestUserByUsername(string username, string password, string repeatedPassword) 
+        public async Task<IActionResult> RequestUserByUsername(string username) 
         {
-            var user = await _userService.CreateUser(username, password, repeatedPassword);
+            var user = await _userService.GetUserByUsername(username);
             return Ok(user);
         }
 

@@ -59,7 +59,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
         {
             var result = await _users.DeleteOneAsync(u => u.Id == userId);
 
-            return result.DeletedCount == 0;
+            return result.DeletedCount == 1;
         }
 
         public async Task<Boolean> UpdatePassword(ObjectId userId, string newPassword, string newSalt) 

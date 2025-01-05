@@ -1,11 +1,6 @@
 ﻿using OurSolarSystemAPI.Models;
-using MySql.Data.MySqlClient;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OurSolarSystemAPI.Repository.MySQL;
-using OurSolarSystemAPI.Utility;
 
 namespace OurSolarSystemAPI.Repository
 {
@@ -76,16 +71,25 @@ namespace OurSolarSystemAPI.Repository
 
         }
 
-        public async Task<UserDto> CreateUser(UserEntity user) 
+        public async Task<UserDto> CreateUser(UserEntity user)
         {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
 
-            return new UserDto
+                return new UserDto
                 {
                     Username = user.Username,
                     Id = user.Id
                 };
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error saving user: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<bool> DeleteUser(int userId) 

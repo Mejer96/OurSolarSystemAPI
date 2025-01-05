@@ -74,7 +74,7 @@ namespace OurSolarSystemAPI.Service.NEO4J
             (byte[] saltBytes, string salt) = PasswordHasher.GenerateSalt();
             string hashedNewPassword = PasswordHasher.HashPasswordWithSalt(newPassword, salt);
 
-            return await _userRepo.UpdatePassword(hashedNewPassword, salt);
+            return await _userRepo.UpdatePassword(user.Id, hashedNewPassword, salt);
         }
         
     }

@@ -8,7 +8,7 @@ namespace OurSolarSystemAPI.Auth
     {
         public static string HashPasswordWithSalt(string password, string salt)
         {
-            byte[] saltBytes = Encoding.UTF8.GetBytes(salt);
+            byte[] saltBytes = Convert.FromBase64String(salt);
             byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
             byte[] saltedPassword = new byte[passwordBytes.Length + saltBytes.Length];
             Array.Copy(passwordBytes, 0, saltedPassword, 0, passwordBytes.Length);

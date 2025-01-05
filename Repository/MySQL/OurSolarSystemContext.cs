@@ -10,8 +10,6 @@ namespace OurSolarSystemAPI.Repository.MySQL
         public DbSet<Star> Sun { get; set; }
         public DbSet<Planet> Planets { get; set; }
         public DbSet<Moon> Moons { get; set; }
-        public DbSet<DistanceResult> DistanceResult { get; set; }
-
         public DbSet<UserFavoriteSatellite> UserFavoriteSatellites { get; set; }
         public DbSet<ArtificialSatellite> ArtificialSatellites  { get; set; }
         public DbSet<UserEntity> Users { get; set; }
