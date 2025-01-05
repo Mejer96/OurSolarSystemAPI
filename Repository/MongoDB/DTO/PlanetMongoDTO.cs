@@ -1,7 +1,8 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using OurSolarSystemAPI.Models;
 
-namespace OurSolarSystemAPI.Models.MongoDB
+namespace OurSolarSystemAPI.Repository.MongoDB
 {
     public class PlanetMongoDTO
     {

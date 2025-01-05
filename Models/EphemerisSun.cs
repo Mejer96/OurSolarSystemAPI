@@ -11,6 +11,7 @@ namespace OurSolarSystemAPI.Models
     {
         public int Id { get; set; }
         public int SunId { get; set; }
+        public int SunHorizonId { get; set; }
         [JsonIgnore]
         public Star Sun { get; set; }
 
@@ -19,6 +20,7 @@ namespace OurSolarSystemAPI.Models
             return new EphemerisSun 
             {
                 Sun = sun,
+                SunHorizonId = sun.HorizonId,
                 PositionX = Convert.ToDouble(ephemerisDict["positionX"]),
                 PositionY = Convert.ToDouble(ephemerisDict["positionY"]),
                 PositionZ = Convert.ToDouble(ephemerisDict["positionZ"]),

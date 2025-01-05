@@ -1,8 +1,8 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using OurSolarSystemAPI.Models.MongoDB;
+using OurSolarSystemAPI.Models;
 
-namespace OurSolarSystemAPI.Models
+namespace OurSolarSystemAPI.Repository.MongoDB
 {
     public class SolarSystemBarycenterMongoDTO()
 {

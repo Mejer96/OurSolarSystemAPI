@@ -6,11 +6,11 @@ namespace OurSolarSystemAPI.Controllers.MySQL
 {
     [ApiController]
     [Route("api/mysql")]
-    public class ArtificialSatelliteController : ControllerBase
+    public class ArtificialSatelliteControllerMySQL : ControllerBase
     {
         private readonly ArtificialSatelliteService _satelliteService;
 
-        public ArtificialSatelliteController(ArtificialSatelliteService satelliteService) 
+        public ArtificialSatelliteControllerMySQL(ArtificialSatelliteService satelliteService) 
         {
             _satelliteService = satelliteService;
         }

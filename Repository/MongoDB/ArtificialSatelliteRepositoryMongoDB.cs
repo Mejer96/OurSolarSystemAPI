@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 using OurSolarSystemAPI.Models;
-using OurSolarSystemAPI.Models.MongoDB;
+
 
 namespace OurSolarSystemAPI.Repository.MongoDB
 {

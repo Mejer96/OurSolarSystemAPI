@@ -1,6 +1,5 @@
 ﻿using MongoDB.Driver;
 using OurSolarSystemAPI.Models;
-using OurSolarSystemAPI.Models.MongoDB;
 
 namespace OurSolarSystemAPI.Repository.MongoDB
 {
@@ -22,6 +21,9 @@ namespace OurSolarSystemAPI.Repository.MongoDB
 
         public IMongoCollection<EphemerisBarycenter> GetEphemerisBarycenterCollection() =>
         _database.GetCollection<EphemerisBarycenter>("EphemerisBarycenters");
+
+        public IMongoCollection<UserDTOMongoDB> GetUserCollection() =>
+        _database.GetCollection<UserDTOMongoDB>("Users");
 
         public IMongoCollection<MoonMongoDTOWithId> GetMoonCollection() =>
         _database.GetCollection<MoonMongoDTOWithId>("Moons");

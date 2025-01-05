@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using OurSolarSystemAPI.Models;
-using OurSolarSystemAPI.Models.MongoDB;
 using System.Collections.Generic;
 
 

@@ -1,13 +1,14 @@
 using Neo4j.Driver;
 using Neo4j.Driver.Mapping;
 using OurSolarSystemAPI.Models;
-using System.Text.Json; // Or Newtonsoft.Json
+using System.Text.Json;
 
 namespace OurSolarSystemAPI.Repository.NEO4J 
 {
     public class PlanetRepositoryNEO4J 
     {
         private readonly IDriver _driver;
+        private readonly JsonSerializerOptions SerializerOptions = new() { WriteIndented = true };
 
         public PlanetRepositoryNEO4J(IDriver driver)
         {
@@ -91,12 +92,12 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             return result;
         }
 
-        public async Task<string> FetchEphemerisByHorizonIdAndDate(int horizonId, DateTime date)
+        public async Task<string> GetLocationByHorizonIdAndDate(int horizonId, DateTime date)
         {
             const string query = @"
-                MATCH (p:Planet {horizonId: 399})-[:HAS_LOCATION]->(e:Ephemeris) 
-                WHERE e.DateTime.year = 2024 AND e.DateTime.month = 1 AND e.DateTime.day = 1
-                RETURN p as planet, collect(e) as ephemeris";
+                MATCH (p:Planet {horizonId: $horizonId})-[:HAS_LOCATION]->(e:Ephemeris) 
+                WHERE e.DateTime.year = $year AND e.DateTime.month = $month AND e.DateTime.day = $day
+                RETURN p as planet, e as ephemeris";
 
             await using var session = _driver.AsyncSession();
 
@@ -104,21 +105,26 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             {
                 var result = await session.ExecuteReadAsync(async tx =>
                 {
-                    var cursor = await tx.RunAsync(query, new { horizonId, date = date.ToString("yyyy-MM-dd") });
-                    var record = await cursor.SingleAsync(); // Avoid exceptions if no match
+                    var parameters = new
+                    {
+                        horizonId,
+                        year = date.Year,
+                        month = date.Month,
+                        day = date.Day
+                    };
+                    var cursor = await tx.RunAsync(query, parameters);
+                    var record = await cursor.SingleAsync();
 
-                    var properties = record?["e"].As<INode>()?.Properties;
+                    var properties = record?["ephemeris"].As<INode>()?.Properties;
 
                     if (properties != null)
                     {
-                     
-                        return JsonSerializer.Serialize(properties); 
                         
+                        return JsonSerializer.Serialize(properties, SerializerOptions); 
                     }
 
                     return null;
                 });
-
                 return result;
             }
             finally
@@ -127,7 +133,45 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             }
         }
 
-        public async Task<string> FetchAllEphemerisByHorizonId(int horizonId)
+        public async Task<string> GetAttribute(int horizonId, string attribute)
+        {
+            const string query = @"
+                MATCH (p:Planet {horizonId: $horizonId}) 
+                RETURN p[$attribute] as attribute";
+
+            await using var session = _driver.AsyncSession();
+
+            try
+            {
+                var result = await session.ExecuteReadAsync(async tx =>
+                {
+                    var parameters = new
+                    {
+                        horizonId,
+                        attribute
+                    };
+                    var cursor = await tx.RunAsync(query, parameters);
+                    var record = await cursor.SingleAsync();
+
+                    var properties = record?["attribute"].As<INode>()?.Properties;
+
+                    if (properties != null)
+                    {
+                        
+                        return JsonSerializer.Serialize(properties, SerializerOptions); 
+                    }
+
+                    return null;
+                });
+                return result;
+            }
+            finally
+            {
+                await session.CloseAsync();
+            }
+        }
+
+        public async Task<string> GetLocationsByHorizonId(int horizonId)
         {
             const string query = @"
                 MATCH (p:Planet {horizonId: $horizonId})-[:HAS_LOCATION]->(e:Ephemeris)
@@ -145,9 +189,7 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                         var node = record["e"].As<INode>();
                         return node.Properties;
                     });
-
-                    // Convert the list of properties to a JSON array
-                    return JsonSerializer.Serialize(nodes); // Or JsonConvert.SerializeObject(nodes) for Newtonsoft.Json
+                    return JsonSerializer.Serialize(nodes);
                 });
 
                 return result;
@@ -158,12 +200,20 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             }
         }
 
-        public async Task<string> FetchEphemerisByNameAndDate(string name, DateTime date)
+        public async Task<string> GetDistanceBetween(int firstHorizonId, int secondHorizonId, DateTime date)
         {
             const string query = @"
-                MATCH (p:Planet {name: $name})-[:HAS_LOCATION]->(e:Ephemeris) 
-                WHERE e.DateTime.year = 2024 AND e.DateTime.month = 1 AND e.DateTime.day = 1
-                RETURN p as planet, collect(e) as ephemeris";
+            MATCH (p1:Planet {horizonId: $firstHorizonId})-[:HAS_LOCATION]->(e1:Ephemeris),
+            (p2:Planet {horizonId: $secondHorizonId})-[:HAS_LOCATION]->(e2:Ephemeris)
+            WHERE e1.DateTime.year = $year AND e1.DateTime.month = $month AND e1.DateTime.day = $day
+            AND e2.DateTime.year = $year AND e2.DateTime.month = $month AND e2.DateTime.day = $day
+            WITH e1, e2,
+                sqrt(
+                    (e1.positionX - e2.positionX)^2 +
+                    (e1.positionY - e2.positionY)^2 +
+                    (e1.positionZ - e2.positionZ)^2
+                ) AS distance
+            RETURN e1.DateTime AS dateTime, distance";
 
             await using var session = _driver.AsyncSession();
 
@@ -171,16 +221,95 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             {
                 var result = await session.ExecuteReadAsync(async tx =>
                 {
-                    var cursor = await tx.RunAsync(query, new { name, date = date.ToString("yyyy-MM-dd") });
+                    var parameters = new
+                    {
+                        firstHorizonId,
+                        secondHorizonId,
+                        year = date.Year,
+                        month = date.Month,
+                        day = date.Day
+                    };
+                    var cursor = await tx.RunAsync(query, parameters);
+                    var nodes = await cursor.ToListAsync(record =>
+                    {
+                        var dateTime = record["dateTime"].As<LocalDateTime>().ToString();
+                        var distance = record["distance"].As<double>();
+                        return new { dateTime, distance };
+                    });
+
+                    return JsonSerializer.Serialize(nodes, SerializerOptions);
+                });
+
+                return result;
+            }
+            finally
+            {
+                await session.CloseAsync();
+            }
+        }
+
+
+        public async Task<string> GetByName(string name)
+        {
+            const string query = @"
+                MATCH (p:Planet {name: $name}) 
+                RETURN p as planet";
+
+            await using var session = _driver.AsyncSession();
+
+            try
+            {
+                var result = await session.ExecuteReadAsync(async tx =>
+                {
+                    var parameters = new
+                    {
+                        name
+                    };
+                    var cursor = await tx.RunAsync(query, parameters);
                     var record = await cursor.SingleAsync(); 
 
-                    var properties = record?["e"].As<INode>()?.Properties;
+                    var properties = record?["planet"].As<INode>()?.Properties;
 
                     if (properties != null)
                     {
-                     
-                        return JsonSerializer.Serialize(properties); 
-                        
+                        return JsonSerializer.Serialize(properties, SerializerOptions);    
+                    }
+
+                    return null; 
+                });
+
+                return result;
+            }
+            finally
+            {
+                await session.CloseAsync();
+            }
+        }
+
+        public async Task<string> GetByHorizonId(int horizonId)
+        {
+            const string query = @"
+                MATCH (p:Planet {name: $horizonId}) 
+                RETURN p as planet";
+
+            await using var session = _driver.AsyncSession();
+
+            try
+            {
+                var result = await session.ExecuteReadAsync(async tx =>
+                {
+                    var parameters = new
+                    {
+                        horizonId
+                    };
+                    var cursor = await tx.RunAsync(query, parameters);
+                    var record = await cursor.SingleAsync(); 
+
+                    var properties = record?["planet"].As<INode>()?.Properties;
+
+                    if (properties != null)
+                    {
+                        return JsonSerializer.Serialize(properties, SerializerOptions);    
                     }
 
                     return null; 

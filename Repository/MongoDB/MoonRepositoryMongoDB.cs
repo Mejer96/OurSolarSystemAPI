@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
-using OurSolarSystemAPI.Models.MongoDB;
 
 namespace OurSolarSystemAPI.Repository.MongoDB
 {

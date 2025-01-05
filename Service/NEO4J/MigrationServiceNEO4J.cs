@@ -54,7 +54,7 @@ namespace OurSolarSystemAPI.Service.NEO4J
 
         public async Task MigratePlanets() 
         {
-            List<Planet> planets = await _planetRepoMySQL.requestAllPlanetsWithEphemeris();
+            List<Planet> planets = await _planetRepoMySQL.GetAllPlanetsWithEphemeris();
 
             foreach (var planet in planets) 
             {

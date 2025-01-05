@@ -20,6 +20,7 @@ namespace OurSolarSystemAPI.Service
             }
             
             sun.Ephemeris = ephemeris;
+            
             return sun;
         }
 

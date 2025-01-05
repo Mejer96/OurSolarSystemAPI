@@ -10,6 +10,7 @@ namespace OurSolarSystemAPI.Models
         public int Id { get; set; }
         [BsonIgnore]
         public int MoonId { get; set; }
+        public int MoonHorizonId { get; set; }
         [JsonIgnore]
         [BsonIgnore]
         public Moon Moon { get; set; }
@@ -20,6 +21,7 @@ namespace OurSolarSystemAPI.Models
             return new EphemerisMoon 
             {
                 Moon = moon,
+                MoonHorizonId = moon.HorizonId,
                 PositionX = Convert.ToDouble(ephemerisDict["positionX"]),
                 PositionY = Convert.ToDouble(ephemerisDict["positionY"]),
                 PositionZ = Convert.ToDouble(ephemerisDict["positionZ"]),

@@ -50,8 +50,6 @@ namespace OurSolarSystemAPI.Controllers.NEO4J;
  
         }
 
-
-
         [HttpGet("migrate-satellites")]
         public async Task<IActionResult> ScrapeSatelittes() 
         {

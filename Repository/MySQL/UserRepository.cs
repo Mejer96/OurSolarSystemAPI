@@ -11,9 +11,8 @@ namespace OurSolarSystemAPI.Repository
 {
     public class UserDto 
     {
-        public required string username { get; set; }
-        public required string role { get; set; }
-        public required int id { get; set; }
+        public required string Username { get; set; }
+        public required int Id { get; set; }
     }
     public class UserRepositoryMySQL
     {
@@ -25,102 +24,89 @@ namespace OurSolarSystemAPI.Repository
             _context = context;
         }
 
-        public async Task<List<UserDto>> RequestAllUsers()
+        public async Task<List<UserDto>> GetAllUsers()
         {
             return await _context.Users
                 .Select(u => new UserDto
                 {
-                    username = u.Username,
-                    role = u.Role,
-                    id = u.Id
+                    Username = u.Username,
+                    Id = u.Id
                 })
                 .ToListAsync();
         }
 
-        public async Task<UserDto> RequestUserById(int id) 
+        public async Task<UserDto> GetUserById(int id) 
         {
             return await _context.Users.Where(u => u.Id == id)
             .Select(u => new UserDto
                 {
-                    username = u.Username,
-                    role = u.Role,
-                    id = u.Id
+                    Username = u.Username,
+                    Id = u.Id
                 })
             .FirstOrDefaultAsync() ?? throw new Exception();
 
         }
 
-        public async Task<UserDto> RequestUserByUsername(string username) 
+        public async Task<UserEntity> GetUserByWithSaltAndPassword(string username) 
+        {
+            return await _context.Users.Where(u => u.Username == username)
+            .FirstOrDefaultAsync() ?? throw new Exception();
+        }
+
+        public async Task<UserDto> GetUserByUsername(string username) 
         {
             return await _context.Users.Where(u => u.Username == username)
             .Select(u => new UserDto
                 {
-                    username = u.Username,
-                    role = u.Role,
-                    id = u.Id
+                    Username = u.Username,
+                    Id = u.Id
                 })
             .FirstOrDefaultAsync() ?? throw new Exception();
-
         }
 
-        public async Task<UserDto> RequestUserByUsernameAndPassword(string username, string password) 
+        public async Task<UserDto> GetUserByUsernameAndPassword(string username, string password) 
         {
             return await _context.Users.Where(u => u.Username == username && u.Password == password)
             .Select(u => new UserDto
                 {
-                    username = u.Username,
-                    role = u.Role,
-                    id = u.Id
+                    Username = u.Username,
+                    Id = u.Id
                 })
             .FirstOrDefaultAsync() ?? throw new Exception();
 
         }
 
-        public async Task CreateUser(UserEntity user) 
+        public async Task<UserDto> CreateUser(UserEntity user) 
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+
+            return new UserDto
+                {
+                    Username = user.Username,
+                    Id = user.Id
+                };
         }
 
-        public async Task<bool> UpdateUser(string username, string oldPassword, string newPassword, string newSalt) 
+        public async Task<bool> DeleteUser(int userId) 
         {
-             string oldPasswordHashed = UserEntity.HashPassword(oldPassword);
-            UserEntity user = await _context.Users
-            .Where(u => u.Username == username)
-            .FirstAsync() ?? throw new Exception("User not found");
+            var result = await _context.Users
+            .Where(u => u.Id == userId)
+            .ExecuteDeleteAsync();
 
-            byte[] salt = Convert.FromBase64String(user.PasswordSalt);
-            string hashedOldPassword = UserEntity.HashPasswordWithSalt(oldPassword, salt);
+            return result > 0;
+        }
 
-            if (hashedOldPassword != user.Password) throw new Exception("incorrect password");
-
-            user.Password = newPassword;
-            user.PasswordSalt = newSalt;
-
+        public async Task<UserDto> UpdateUser(UserEntity user) 
+        {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return true; 
-        }
-
-        public static bool VerifyUsername(string inputUsername, UserEntity user)
-        { 
-            if (user.Username == inputUsername)
-            {
-                return true;
-            }
-            throw new UnauthorizedAccessException("Username is incorrect");
-        }
-
-        public static bool VerifyPassword(string inputPassword, UserEntity user)
-        {
-            string hashedInputPassword = UserEntity.HashPassword(inputPassword);
-            if (user.Password == hashedInputPassword)
-            {
-                return true;
-            }
-
-            throw new UnauthorizedAccessException("Password is incorrect");
+            return new UserDto
+                {
+                    Username = user.Username,
+                    Id = user.Id
+                }; 
         }
     }
 }

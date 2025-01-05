@@ -12,6 +12,7 @@ namespace OurSolarSystemAPI.Models
         public int Id { get; set; }
         [BsonIgnore]
         public int BarycenterId { get; set; }
+        public int BarycenterHorizonId { get; set; }
         [BsonIgnore]
         public Barycenter? Barycenter { get; set; } 
 
@@ -20,6 +21,7 @@ namespace OurSolarSystemAPI.Models
             return new EphemerisBarycenter 
             {
                 Barycenter = barycenter,
+                BarycenterHorizonId = barycenter.HorizonId,
                 PositionX = Convert.ToDouble(ephemerisDict["positionX"]),
                 PositionY = Convert.ToDouble(ephemerisDict["positionY"]),
                 PositionZ = Convert.ToDouble(ephemerisDict["positionZ"]),

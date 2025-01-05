@@ -10,6 +10,9 @@ namespace OurSolarSystemAPI.Repository.MySQL
         public DbSet<Star> Sun { get; set; }
         public DbSet<Planet> Planets { get; set; }
         public DbSet<Moon> Moons { get; set; }
+        public DbSet<DistanceResult> DistanceResult { get; set; }
+
+        public DbSet<UserFavoriteSatellite> UserFavoriteSatellites { get; set; }
         public DbSet<ArtificialSatellite> ArtificialSatellites  { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<EphemerisBarycenter> EphemerisBarycenters { get; set; }
@@ -23,6 +26,11 @@ namespace OurSolarSystemAPI.Repository.MySQL
         {
             modelBuilder.Entity<Planet>()
             .HasAlternateKey(p => p.HorizonId);
+
+            modelBuilder.Entity<DistanceResult>(entity =>
+            {
+                entity.HasNoKey(); // Marking this entity as keyless
+            });
 
             modelBuilder.Entity<Planet>()
             .HasAlternateKey(p => p.HorizonId);

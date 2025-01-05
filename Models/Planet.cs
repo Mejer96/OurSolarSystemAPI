@@ -47,8 +47,6 @@ namespace OurSolarSystemAPI.Models
         public double? MinPlanetaryIRPerihelion { get; set; }
         public double? MinPlanetaryIRAphelion { get; set; }
         public double? MinPlanetaryIRMean { get; set; }
-
-        
     }
 
     

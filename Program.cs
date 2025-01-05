@@ -7,19 +7,11 @@ using OurSolarSystemAPI.Repository.NEO4J;
 using OurSolarSystemAPI.Service.MySQL;
 using OurSolarSystemAPI.Service.NEO4J;
 using OurSolarSystemAPI.Service.MongoDB;
-// using OurSolarSystemAPI.Service;
 using Microsoft.OpenApi.Models;
 using Neo4j.Driver;
 using OurSolarSystemAPI.Repository;
 using OurSolarSystemAPI.Service;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models; // For Swagger and OpenAPI configurations
-using Microsoft.AspNetCore.Authorization; // For [Authorize] attribute
-using Microsoft.AspNetCore.Mvc;
-using OurSolarSystemAPI.Repository.MongoDB; // For API controllers and IActionResult
+using OurSolarSystemAPI.Repository.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +60,7 @@ builder.Services.AddDbContext<OurSolarSystemContext>(options =>
 );
 builder.Services.AddScoped<ScrapingServiceMySQL>();
 builder.Services.AddScoped<PlanetServiceMySQL>();
+builder.Services.AddScoped<UserServiceMySQL>();
 builder.Services.AddScoped<BarycenterRepositoryMySQL>();
 builder.Services.AddScoped<PlanetRepositoryMySQL>();
 builder.Services.AddScoped<MoonRepositoryMySQL>();
@@ -82,7 +75,9 @@ builder.Services.AddScoped<PlanetRepositoryNEO4J>();
 builder.Services.AddScoped<MigrationServiceNEO4J>();
 builder.Services.AddScoped<ArtificialSatelliteRepositoryNEO4J>();
 builder.Services.AddScoped<EphemerisRepositoryNEO4J>();
-
+builder.Services.AddScoped<UserRepositoryNEO4J>();
+builder.Services.AddScoped<UserServiceNEO4J>();
+builder.Services.AddScoped<PlanetServiceNEO4J>();
 
 // MongoDB
 builder.Services.AddSingleton<MongoDbContext>();
@@ -92,8 +87,12 @@ builder.Services.AddScoped<MoonRepositoryMongoDB>();
 builder.Services.AddScoped<ArtificialSatelliteRepositoryMongoDB>();
 builder.Services.AddScoped<EphemerisRepositoryMongoDB>();
 builder.Services.AddScoped<MigrationServiceMongoDB>();
-
+builder.Services.AddScoped<PlanetServiceMongoDB>();
+builder.Services.AddScoped<UserServiceMongoDB>();
+builder.Services.AddScoped<UserRepositoryMongoDB>();
 builder.Services.AddControllers();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

@@ -1,5 +1,6 @@
 using OurSolarSystemAPI.Repository.MySQL;
 using OurSolarSystemAPI.Models;
+using System.Numerics;
 namespace OurSolarSystemAPI.Service.MySQL
 {
     public class PlanetServiceMySQL 
@@ -13,61 +14,48 @@ namespace OurSolarSystemAPI.Service.MySQL
         {
             _planetRepo = planetRepo;
         }
-
-        public Planet? RequestPlanetLocationByNameAndDateTime(string name, DateTime dateTime) 
+        public async Task<DistanceResult> GetDistance(int firstHorizonId, int secondHorizonId, DateTime date) 
         {
-            return _planetRepo.RequestPlanetLocationByNameAndDateTime(name, dateTime);
+            return await _planetRepo.GetDistance(firstHorizonId, secondHorizonId, date);
+
         }
 
-        public Planet? RequestPlanetLocationsByHorizonId(int horizonId) 
+        public async Task<Planet> GetByHorizonId(int horizonId) 
         {
-            Planet planet = _planetRepo.RequestPlanetLocationByHorizonId(horizonId);
-            foreach (EphemerisPlanet ephemeris in planet.Ephemeris) 
-                {
-                    ephemeris.ScaledPositionX = ScalePlanetCoordinates(ephemeris.PositionX);
-                    ephemeris.ScaledPositionY = ScalePlanetCoordinates(ephemeris.PositionY);
-                    ephemeris.ScaledPositionZ = ScalePlanetCoordinates(ephemeris.PositionZ);
-                }
-            return planet;
+            return await _planetRepo.GetByHorizonId(horizonId);
+
         }
 
-        public async Task<List<EphemerisPlanet>> RequestPlanetEphemerisWithPagination(int horizonId, int pageNumber, int pageSize) 
+
+        public async Task<Planet> GetByName(string name) 
+        {
+            return await _planetRepo.GetByName(name);
+        }
+
+        public async Task<Planet> GetLocationByHorizonIdAndDate(int horizonId, DateTime date) 
+        {
+            return await _planetRepo.GetLocationByHorizonIdAndDate(horizonId, date);
+
+        }
+
+        public async Task<Planet> GetLocationsByHorizonId(int horizonId) 
+        {
+            return await _planetRepo.GetLocationsByHorizonId(horizonId);
+        }
+
+
+        public async Task<List<EphemerisPlanet>> GetEphemerisWithPagination(int horizonId, int pageNumber, int pageSize) 
         {
             List<EphemerisPlanet> data = await _planetRepo.RequestPlanetEphemerisWithPagination(horizonId, pageNumber, pageSize);
-
-            foreach (EphemerisPlanet ephemeris in data) 
-                {
-                    ephemeris.ScaledPositionX = ScalePlanetCoordinates(ephemeris.PositionX);
-                    ephemeris.ScaledPositionY = ScalePlanetCoordinates(ephemeris.PositionY);
-                    ephemeris.ScaledPositionZ = ScalePlanetCoordinates(ephemeris.PositionZ);
-                }
             return data;
         }
 
-        public async Task<List<Planet>> requestAllPlanetsWithEphemeris() 
+        public async Task<List<Planet>> GetAllPlanetsWithEphemeris() 
         {
-            List<Planet> planets = await _planetRepo.requestAllPlanetsWithEphemeris();
-            double scalingFactor = 1e+20;
-
-            foreach (Planet planet in planets) 
-            {
-                foreach (EphemerisPlanet ephemeris in planet.Ephemeris) 
-                {
-                    ephemeris.ScaledPositionX = ScalePlanetCoordinates(ephemeris.PositionX);
-                    ephemeris.ScaledPositionY = ScalePlanetCoordinates(ephemeris.PositionY);
-                    ephemeris.ScaledPositionZ = ScalePlanetCoordinates(ephemeris.PositionZ);
-                }
-            }
+            List<Planet> planets = await _planetRepo.GetAllPlanetsWithEphemeris();
 
             return planets;
         }
-    public double ScalePlanetCoordinates(double position)
-    {
-        // Apply the scaling factor to each coordinate
-        double scaledPosition = position * scalingFactor;
 
-
-        return scaledPosition;
-    }
     }
 }

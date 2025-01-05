@@ -1,7 +1,6 @@
 using OurSolarSystemAPI.Repository.MySQL;
 using OurSolarSystemAPI.Repository.MongoDB;
 using OurSolarSystemAPI.Models;
-using OurSolarSystemAPI.Models.MongoDB;
 
 namespace OurSolarSystemAPI.Service.MongoDB 
 {
@@ -47,7 +46,7 @@ namespace OurSolarSystemAPI.Service.MongoDB
         public async Task MigrateBarycenters() 
         {
             List<Barycenter> barycenters = await _barycenterRepoMySQL.requestAllBarycentersWithEphemeris();
-            List<Planet> planets = await _planetRepoMySQL.requestAllPlanetsWithMoons();
+            List<Planet> planets = await _planetRepoMySQL.GetAllPlanetsWithMoons();
 
             foreach (var barycenter in barycenters) 
             {
@@ -79,13 +78,13 @@ namespace OurSolarSystemAPI.Service.MongoDB
 
         public async Task MigrateSun() 
         {
-            Star sun = await _planetRepoMySQL.RequestSunWithEphemeris();
+            Star sun = await _planetRepoMySQL.GetSunWithEphemeris();
 
             var ephemerisDTOs = new List<EphemerisMongoDTO>();
             if (sun.Ephemeris is null) throw new Exception($"No ephemeris data for sun with horizon id: {sun.HorizonId}");
             StarMongoDTO sunDTO = StarMongoDTO.ConvertToStarMongoDTO(sun);
 
-            await _planetRepoMongoDB.CreateSunAsync(sunDTO);
+            await _planetRepoMongoDB.CreateSun(sunDTO);
 
             foreach (EphemerisSun ephemeris in sun.Ephemeris) 
             {
@@ -96,7 +95,7 @@ namespace OurSolarSystemAPI.Service.MongoDB
 
         public async Task MigratePlanets() 
         {
-            List<Planet> planets = await _planetRepoMySQL.requestAllPlanetsWithEphemerisAndMoons();
+            List<Planet> planets = await _planetRepoMySQL.GetAllPlanetsWithEphemerisAndMoons();
 
             foreach (var planet in planets) 
             {
@@ -112,7 +111,7 @@ namespace OurSolarSystemAPI.Service.MongoDB
                     }
                 }
                 planetDTO.Moons = moonDTOs;
-                await _planetRepoMongoDB.CreatePlanetAsync(planetDTO);
+                await _planetRepoMongoDB.CreatePlanet(planetDTO);
                 var ephemerisDTOs = new List<EphemerisMongoDTO>();
 
                 foreach (EphemerisPlanet ephemeris in planet.Ephemeris) 

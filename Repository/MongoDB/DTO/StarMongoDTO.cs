@@ -1,8 +1,8 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using OurSolarSystemAPI.Models;
 
-
-namespace OurSolarSystemAPI.Models
+namespace OurSolarSystemAPI.Repository.MongoDB
 {
     public class StarMongoDTO
     {

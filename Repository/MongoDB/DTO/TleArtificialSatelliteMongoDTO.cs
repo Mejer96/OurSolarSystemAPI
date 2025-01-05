@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using OurSolarSystemAPI.Models;
 
-namespace OurSolarSystemAPI.Models
+
+namespace OurSolarSystemAPI.Repository.MongoDB
 {
     public class TleArtificialSatelliteMongoDTO() 
     {

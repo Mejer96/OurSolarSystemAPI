@@ -1,10 +1,10 @@
 using System.Text.Json.Serialization;
-
+using OurSolarSystemAPI.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace OurSolarSystemAPI.Models.MongoDB
+namespace OurSolarSystemAPI.Repository.MongoDB
 {
     public class BarycenterMongoDTO()
     {
