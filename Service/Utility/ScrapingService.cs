@@ -10,7 +10,7 @@ namespace OurSolarSystemAPI.Service
             var horizonParser = new HorizonParser();
             Star sun = horizonScraper.SunData();
             var ephemeris = new List<EphemerisSun>();
-            string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{sun.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-02-01";
+            string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{sun.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2025-01-01&stop_time=2026-01-01";
             string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
             List<Dictionary<string, object>> vectors = horizonParser.ExtractEphemeris(apiResponse);
 
@@ -34,7 +34,7 @@ namespace OurSolarSystemAPI.Service
             foreach (var barycenter in barycenters) 
             {
                 var ephemeris = new List<EphemerisBarycenter>();
-                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{barycenter.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-02-01";
+                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{barycenter.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2025-01-01&stop_time=2026-01-01";
                 string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
                 List<Dictionary<string, object>> vectors = horizonParser.ExtractEphemeris(apiResponse);
                 
@@ -57,7 +57,7 @@ namespace OurSolarSystemAPI.Service
             foreach (var barycenter in barycenters) 
             {
                 var ephemeris = new List<EphemerisBarycenter>();
-                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{barycenter.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-02-01";
+                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{barycenter.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2025-01-01&stop_time=2026-01-01";
                 string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
                 List<Dictionary<string, object>> vectors = horizonParser.ExtractEphemerisTest2(apiResponse);
                 dict.Add(barycenter.Name, vectors);
@@ -85,7 +85,7 @@ namespace OurSolarSystemAPI.Service
 
             foreach (var planet in planets) 
             {
-                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{planet.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2124-01-01";
+                string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{planet.HorizonId}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2025-01-01&stop_time=2026-01-01";
                 string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
                 List<Dictionary<string, object>> vectorSets = horizonParser.ExtractEphemeris(apiResponse);
                 var ephemeris = new List<EphemerisPlanet>();
@@ -110,7 +110,7 @@ namespace OurSolarSystemAPI.Service
                 var moons = new List<Moon>();
                 foreach (var moonDesignators in mooncontainer.Moons) 
                 {
-                    string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{moonDesignators.ID}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2024-01-01&stop_time=2024-02-01";
+                    string url = $"https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND='{moonDesignators.ID}'&center='@0'&ephem_type='Vectors'&vec_table=2&step_size=1d&start_time=2025-01-01&stop_time=2026-01-01";
                     string apiResponse = await UtilityGetRequest.PerformRequest(url, httpClient);
                     Moon moon = horizonParser.ExtractMoonData(apiResponse);
                     var ephemeris = new List<EphemerisMoon>();
