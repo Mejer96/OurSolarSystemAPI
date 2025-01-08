@@ -68,7 +68,7 @@ builder.Services.AddScoped<ArtificialSatelliteRepositoryMySQL>();
 builder.Services.AddScoped<UserRepositoryMySQL>();
 
 // NEO4J
-builder.Services.AddSingleton(GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "Password123")));
+builder.Services.AddSingleton(GraphDatabase.Driver("neo4j+s://736db64e.databases.neo4j.io", AuthTokens.Basic("neo4j", "p6i9fPnQ8SCl4oxcccTrOMEosaHLdqeR-mPcklLCQTY")));
 builder.Services.AddScoped<BarycenterRepositoryNEO4J>();
 builder.Services.AddScoped<MoonRepositoryNEO4J>();
 builder.Services.AddScoped<PlanetRepositoryNEO4J>();
