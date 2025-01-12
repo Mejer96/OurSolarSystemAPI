@@ -1,22 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
-using OurSolarSystemAPI.Service.MongoDB;
 using OurSolarSystemAPI.Models;
+using OurSolarSystemAPI.Service.MongoDB;
 
-namespace OurSolarSystemAPI.Controllers.MongoDB 
+namespace OurSolarSystemAPI.Controllers.MongoDB
 {
     [ApiController]
     [Route("mongodb/api/planet")]
-    public class UserControllerMongoDB : ControllerBase 
+    public class UserControllerMongoDB : ControllerBase
     {
         private readonly UserServiceMongoDB _userService;
 
-        public UserControllerMongoDB(UserServiceMongoDB userService) 
+        public UserControllerMongoDB(UserServiceMongoDB userService)
         {
             _userService = userService;
         }
 
         [HttpPost("create-user")]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userInfo) 
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userInfo)
         {
             var user = await _userService.CreateUser(userInfo.Username, userInfo.Password, userInfo.RepeatedPassword);
             return Ok(user);
@@ -24,7 +24,7 @@ namespace OurSolarSystemAPI.Controllers.MongoDB
 
 
         [HttpPut("update-username")]
-        public async Task<IActionResult> ChangeUsername(string oldUsername, string newUsername, string password, string repeatedPassword) 
+        public async Task<IActionResult> ChangeUsername(string oldUsername, string newUsername, string password, string repeatedPassword)
         {
             bool isUpdated = await _userService.UpdateUsername(oldUsername, newUsername, password, repeatedPassword);
 
@@ -32,7 +32,7 @@ namespace OurSolarSystemAPI.Controllers.MongoDB
         }
 
         [HttpPut("update-password")]
-        public async Task<IActionResult> ChangePassword(string username, string oldPassword, string repeatedOldPassword, string newPassword, string repeatedNewPassword) 
+        public async Task<IActionResult> ChangePassword(string username, string oldPassword, string repeatedOldPassword, string newPassword, string repeatedNewPassword)
         {
             bool isUpdated = await _userService.UpdatePassword(username, oldPassword, repeatedOldPassword, newPassword, repeatedNewPassword);
 
@@ -40,7 +40,7 @@ namespace OurSolarSystemAPI.Controllers.MongoDB
         }
 
         [HttpDelete("delete-user")]
-        public async Task<IActionResult> DeleteUser(string username, string password, string repeatedPassword) 
+        public async Task<IActionResult> DeleteUser(string username, string password, string repeatedPassword)
         {
             bool isDeleted = await _userService.DeleteUser(username, password, repeatedPassword);
 

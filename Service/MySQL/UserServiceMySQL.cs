@@ -1,18 +1,18 @@
 using OurSolarSystemAPI.Auth;
 using OurSolarSystemAPI.Models;
 using OurSolarSystemAPI.Repository;
-namespace OurSolarSystemAPI.Service.MySQL 
+namespace OurSolarSystemAPI.Service.MySQL
 {
-    public class UserServiceMySQL 
+    public class UserServiceMySQL
     {
         private readonly UserRepositoryMySQL _userRepo;
 
-        public UserServiceMySQL(UserRepositoryMySQL userRepo) 
+        public UserServiceMySQL(UserRepositoryMySQL userRepo)
         {
             _userRepo = userRepo;
         }
 
-        public async Task<UserDto> CreateUser(string username, string password, string repeatedPassword) 
+        public async Task<UserDto> CreateUser(string username, string password, string repeatedPassword)
         {
 
             if (password != repeatedPassword) throw new Exception("Passwords doesn't match");
@@ -26,17 +26,17 @@ namespace OurSolarSystemAPI.Service.MySQL
                 Password = hashedPassword,
                 PasswordSalt = salt,
             };
-        
+
             return await _userRepo.CreateUser(user);
 
         }
 
-        public async Task<UserDto> GetUserByUsername(string username) 
+        public async Task<UserDto> GetUserByUsername(string username)
         {
             return await _userRepo.GetUserByUsername(username);
         }
 
-        public async Task<bool> DeleteUser(string username, string password, string repeatedPassword) 
+        public async Task<bool> DeleteUser(string username, string password, string repeatedPassword)
         {
             if (password != repeatedPassword) throw new Exception("Passwords doesn't match");
 
@@ -50,7 +50,7 @@ namespace OurSolarSystemAPI.Service.MySQL
 
         }
 
-        public async Task<UserDto> UpdatePassword(string username, string oldPassword, string repeatedOldPassword, string newPassword, string repeatedNewPassword) 
+        public async Task<UserDto> UpdatePassword(string username, string oldPassword, string repeatedOldPassword, string newPassword, string repeatedNewPassword)
         {
             if (newPassword != repeatedNewPassword) throw new Exception("Passwords doesn't match");
             if (oldPassword != repeatedOldPassword) throw new Exception("Passwords doesn't match");
@@ -69,10 +69,10 @@ namespace OurSolarSystemAPI.Service.MySQL
             return await _userRepo.UpdateUser(user);
         }
 
-        public async Task<UserDto> UpdateUsername(string oldUsername, string newUsername, string password, string repeatedPassword) 
+        public async Task<UserDto> UpdateUsername(string oldUsername, string newUsername, string password, string repeatedPassword)
         {
             if (password != repeatedPassword) throw new Exception("Passwords doesn't match");
-            
+
             UserEntity user = await _userRepo.GetUserByWithSaltAndPassword(oldUsername);
             string hashedPassword = PasswordHasher.HashPasswordWithSalt(password, user.PasswordSalt);
 
@@ -80,6 +80,6 @@ namespace OurSolarSystemAPI.Service.MySQL
 
             user.Username = newUsername;
             return await _userRepo.UpdateUser(user);
-        }  
+        }
     }
 }

@@ -1,7 +1,8 @@
-namespace OurSolarSystemAPI.Utility {
+namespace OurSolarSystemAPI.Utility
+{
 
 
-    public static class UtilityGetRequest 
+    public static class UtilityGetRequest
     {
         public static async Task<string> PerformRequest(string url, HttpClient client)
         {

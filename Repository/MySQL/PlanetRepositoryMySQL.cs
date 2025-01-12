@@ -1,12 +1,10 @@
-using System.Data.Common;
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using OurSolarSystemAPI.Models;
 using MySqlConnector;
+using OurSolarSystemAPI.Models;
 
 
 
-namespace OurSolarSystemAPI.Repository.MySQL 
+namespace OurSolarSystemAPI.Repository.MySQL
 {
     public class DistanceResult
     {
@@ -14,29 +12,29 @@ namespace OurSolarSystemAPI.Repository.MySQL
         public double Distance { get; set; }
     }
 
-    public class PlanetRepositoryMySQL 
+    public class PlanetRepositoryMySQL
     {
 
         private readonly OurSolarSystemContext _context;
 
-        public PlanetRepositoryMySQL(OurSolarSystemContext context) 
+        public PlanetRepositoryMySQL(OurSolarSystemContext context)
         {
             _context = context;
         }
 
-        public void AddPlanet(Planet planet) 
+        public void AddPlanet(Planet planet)
         {
             _context.Planets.Add(planet);
             _context.SaveChanges();
         }
-        
-        public void AddSun(Star sun) 
+
+        public void AddSun(Star sun)
         {
             _context.Sun.Add(sun);
             _context.SaveChanges();
         }
 
-        public async Task<Star> GetSunWithEphemeris() 
+        public async Task<Star> GetSunWithEphemeris()
         {
             return await _context.Sun
             .Include(s => s.Ephemeris)
@@ -44,21 +42,21 @@ namespace OurSolarSystemAPI.Repository.MySQL
         }
 
 
-        public async Task<List<Planet>> GetAllPlanetsWithMoons() 
+        public async Task<List<Planet>> GetAllPlanetsWithMoons()
         {
             return await _context.Planets
             .Include(p => p.Moons)
             .ToListAsync();
         }
 
-        public async Task<List<Planet>> GetAllPlanetsWithEphemeris() 
+        public async Task<List<Planet>> GetAllPlanetsWithEphemeris()
         {
             return await _context.Planets
             .Include(p => p.Ephemeris)
             .ToListAsync();
         }
 
-        public async Task<List<Planet>> GetAllPlanetsWithEphemerisAndMoons() 
+        public async Task<List<Planet>> GetAllPlanetsWithEphemerisAndMoons()
         {
             return await _context.Planets
             .Include(p => p.Ephemeris)
@@ -67,7 +65,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
         }
 
 
-        public async Task<Planet?> GetByHorizonId(int horizonId) 
+        public async Task<Planet?> GetByHorizonId(int horizonId)
         {
             return await _context.Planets.FirstOrDefaultAsync(p => p.HorizonId == horizonId);
         }
@@ -87,7 +85,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Planet?> GetLocationByHorizonIdAndDate(int horizonId, DateTime date) 
+        public async Task<Planet?> GetLocationByHorizonIdAndDate(int horizonId, DateTime date)
         {
             return await _context.Planets
                 .Include(p => p.Ephemeris.Where(e => e.DateTime == date))
@@ -114,7 +112,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
                     WHERE
                         e1.DateTime = @date
                         AND e2.DateTime = @date
-                    LIMIT 1", 
+                    LIMIT 1",
                     new MySqlParameter("@firstHorizonId", firstHorizonId),
                     new MySqlParameter("@secondHorizonId", secondHorizonId),
                     new MySqlParameter("@date", date.ToString("yyyy-MM-dd HH:mm:ss")))
@@ -133,12 +131,12 @@ namespace OurSolarSystemAPI.Repository.MySQL
         }
 
 
-        public void AddEphemerisToExistingPlanet(List<EphemerisPlanet> ephemeris, int horizonId) 
+        public void AddEphemerisToExistingPlanet(List<EphemerisPlanet> ephemeris, int horizonId)
         {
             var planet = _context.Planets.FirstOrDefault(p => p.HorizonId == horizonId);
             if (planet != null)
             {
-                foreach (var data in ephemeris) 
+                foreach (var data in ephemeris)
                 {
                     planet.Ephemeris.Add(data);
                 }
@@ -146,7 +144,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
             }
         }
 
-        public void AddMoonsToExistingPlanet(List<Moon> moons, int horizonId) 
+        public void AddMoonsToExistingPlanet(List<Moon> moons, int horizonId)
         {
             var planet = _context.Planets.FirstOrDefault(p => p.HorizonId == horizonId);
             if (planet != null)

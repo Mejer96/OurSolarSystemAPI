@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using OurSolarSystemAPI.Service.MySQL;
 using OurSolarSystemAPI.Models;
 using OurSolarSystemAPI.Repository.MySQL;
+using OurSolarSystemAPI.Service.MySQL;
 
-namespace OurSolarSystemAPI.Controllers.MySQL 
+namespace OurSolarSystemAPI.Controllers.MySQL
 {
     [ApiController]
     [Route("mysql/api/planet")]
@@ -11,13 +11,13 @@ namespace OurSolarSystemAPI.Controllers.MySQL
     {
         private readonly PlanetServiceMySQL _planetService;
 
-        public PlanetControllerMySQL(PlanetServiceMySQL planetService) 
+        public PlanetControllerMySQL(PlanetServiceMySQL planetService)
         {
             _planetService = planetService;
         }
 
         [HttpGet("get-by-horizon-id")]
-        public async Task<IActionResult> RequestByHorizonId(int horizonId) 
+        public async Task<IActionResult> RequestByHorizonId(int horizonId)
         {
             Planet planet = await _planetService.GetByHorizonId(horizonId);
 
@@ -25,7 +25,7 @@ namespace OurSolarSystemAPI.Controllers.MySQL
         }
 
         [HttpGet("get-location-by-horizon-id-and-date")]
-        public async Task<IActionResult> RequestLocationByHorizonIdAndDate(int horizonId, int day, int month, int year) 
+        public async Task<IActionResult> RequestLocationByHorizonIdAndDate(int horizonId, int day, int month, int year)
         {
             Planet planet = await _planetService.GetLocationByHorizonIdAndDate(horizonId, new DateTime(year, month, day));
 
@@ -33,7 +33,7 @@ namespace OurSolarSystemAPI.Controllers.MySQL
         }
 
         [HttpGet("get-current-location-by-horizon-id")]
-        public async Task<IActionResult> RequestCurrentLocation(int horizonId) 
+        public async Task<IActionResult> RequestCurrentLocation(int horizonId)
         {
             Planet planet = await _planetService.GetLocationByHorizonIdAndDate(horizonId, DateTime.Now.Date);
 
@@ -41,7 +41,7 @@ namespace OurSolarSystemAPI.Controllers.MySQL
         }
 
         [HttpGet("get-distance-between")]
-        public async Task<IActionResult> RequestDistanceBetween(int firstHorizonId, int secondHorizonId, int day, int month, int year) 
+        public async Task<IActionResult> RequestDistanceBetween(int firstHorizonId, int secondHorizonId, int day, int month, int year)
         {
             DistanceResult result = await _planetService.GetDistance(firstHorizonId, secondHorizonId, new DateTime(year, month, day));
 
@@ -50,7 +50,7 @@ namespace OurSolarSystemAPI.Controllers.MySQL
 
 
         [HttpGet("get-locations-by-horizon-id")]
-        public async Task<IActionResult> RequestLocationsByHorizonId(int horizonId) 
+        public async Task<IActionResult> RequestLocationsByHorizonId(int horizonId)
         {
             Planet planet = await _planetService.GetLocationsByHorizonId(horizonId);
 
@@ -58,7 +58,7 @@ namespace OurSolarSystemAPI.Controllers.MySQL
         }
 
         [HttpGet("get-by-name")]
-        public async Task<IActionResult> RequestByName(string name) 
+        public async Task<IActionResult> RequestByName(string name)
         {
             Planet planet = await _planetService.GetByName(name);
 
@@ -67,7 +67,7 @@ namespace OurSolarSystemAPI.Controllers.MySQL
 
 
         [HttpGet("get-locations-with-pagination-by-horizon-id")]
-        public async Task<IActionResult> RequestPlanetEphemerisWithPagination(int horizonId, int pageNumber, int pageSize) 
+        public async Task<IActionResult> RequestPlanetEphemerisWithPagination(int horizonId, int pageNumber, int pageSize)
         {
             List<EphemerisPlanet> data = await _planetService.GetEphemerisWithPagination(horizonId, pageNumber, pageSize);
 

@@ -2,9 +2,9 @@ using System.Security.Cryptography;
 using System.Text;
 
 
-namespace OurSolarSystemAPI.Auth 
+namespace OurSolarSystemAPI.Auth
 {
-    public class PasswordHasher 
+    public class PasswordHasher
     {
         public static string HashPasswordWithSalt(string password, string salt)
         {
@@ -32,7 +32,7 @@ namespace OurSolarSystemAPI.Auth
             byte[] saltBytes = new byte[length];
             using (var rng = new RNGCryptoServiceProvider())
             {
-                rng.GetBytes(saltBytes); 
+                rng.GetBytes(saltBytes);
             }
             return (saltBytes, Convert.ToBase64String(saltBytes));
         }

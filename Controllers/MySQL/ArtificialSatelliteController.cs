@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using OurSolarSystemAPI.Models;
 using OurSolarSystemAPI.Service;
 
-namespace OurSolarSystemAPI.Controllers.MySQL 
+namespace OurSolarSystemAPI.Controllers.MySQL
 {
     [ApiController]
     [Route("api/mysql")]
@@ -10,23 +9,23 @@ namespace OurSolarSystemAPI.Controllers.MySQL
     {
         private readonly ArtificialSatelliteService _satelliteService;
 
-        public ArtificialSatelliteControllerMySQL(ArtificialSatelliteService satelliteService) 
+        public ArtificialSatelliteControllerMySQL(ArtificialSatelliteService satelliteService)
         {
             _satelliteService = satelliteService;
         }
 
         [HttpGet("get-satellite-by-norad-id")]
-        public IActionResult RequestSatelliteByNoradId(int noradId) 
+        public IActionResult RequestSatelliteByNoradId(int noradId)
         {
             return Ok(_satelliteService.RequestSatelliteByNoradId(noradId));
         }
 
         [HttpGet("get-satellite-location-by-norad-id-and-date")]
-        public IActionResult RequestSatelliteByNoradIdAndDatetime(int noradId, DateTime dateTime) 
+        public IActionResult RequestSatelliteByNoradIdAndDatetime(int noradId, DateTime dateTime)
         {
             return Ok(_satelliteService.RequestSatelliteByNoradIdAndDateTime(noradId, dateTime));
         }
-        
+
     }
 
 }

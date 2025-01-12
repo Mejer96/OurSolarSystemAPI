@@ -1,16 +1,13 @@
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
-using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
 using OurSolarSystemAPI.Models;
-using System.Text.Json.Serialization;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OurSolarSystemAPI.Repository.MongoDB
 {
     public class EphemerisMongoDTO
     {
         [BsonId]
-        public ObjectId Id {get; set; }
+        public ObjectId Id { get; set; }
         public ObjectId CelestialBodyId { get; set; }
         public int CelestialBodyHorizonId { get; set; }
         public double PositionX { get; set; }
@@ -40,6 +37,6 @@ namespace OurSolarSystemAPI.Repository.MongoDB
         }
     }
 
-    
+
 
 }

@@ -7,7 +7,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
     public class PlanetMongoDTO
     {
         [BsonId]
-        public ObjectId Id {get; set; }
+        public ObjectId Id { get; set; }
         public required int HorizonId { get; set; }
         public List<MoonMongoDTO>? Moons { get; set; }
         public string Name { get; set; }
@@ -46,9 +46,9 @@ namespace OurSolarSystemAPI.Repository.MongoDB
         {
             var moonDTOs = new List<MoonMongoDTO>();
 
-            if (planet.Moons != null) 
+            if (planet.Moons != null)
             {
-                foreach (Moon moon in planet.Moons) 
+                foreach (Moon moon in planet.Moons)
                 {
                     moonDTOs.Add(MoonMongoDTO.ConvertToMoonMongoDTO(moon));
                 }
@@ -93,5 +93,5 @@ namespace OurSolarSystemAPI.Repository.MongoDB
         }
     }
 
-    
+
 }

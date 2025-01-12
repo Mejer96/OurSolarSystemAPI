@@ -1,21 +1,19 @@
-using OurSolarSystemAPI.Service.Interfaces;
 using OurSolarSystemAPI.Repository.MongoDB;
-using System;
 
-namespace OurSolarSystemAPI.Service.MongoDB 
+namespace OurSolarSystemAPI.Service.MongoDB
 {
     public class PlanetServiceMongoDB
     {
         private readonly PlanetRepositoryMongoDB _planetRepoMongoDB;
 
-        public PlanetServiceMongoDB(PlanetRepositoryMongoDB planetRepoMongoDB) 
+        public PlanetServiceMongoDB(PlanetRepositoryMongoDB planetRepoMongoDB)
         {
             _planetRepoMongoDB = planetRepoMongoDB;
         }
 
-        public async Task<(DateTime date, double distance)> GetDistanceBetween(int firstHorizonId, int secondHorizonId, DateTime date) 
+        public async Task<(DateTime date, double distance)> GetDistanceBetween(int firstHorizonId, int secondHorizonId, DateTime date)
         {
-           (EphemerisMongoDTO planetLocationOne, EphemerisMongoDTO planetLocationTwo) = await _planetRepoMongoDB.GetDistance(firstHorizonId, secondHorizonId, date);
+            (EphemerisMongoDTO planetLocationOne, EphemerisMongoDTO planetLocationTwo) = await _planetRepoMongoDB.GetDistance(firstHorizonId, secondHorizonId, date);
 
             double deltaX = planetLocationTwo.PositionX - planetLocationOne.PositionX;
             double deltaY = planetLocationTwo.PositionY - planetLocationOne.PositionY;
@@ -26,24 +24,24 @@ namespace OurSolarSystemAPI.Service.MongoDB
             return (date, distance);
         }
 
-        public async Task<PlanetMongoDTO> GetByHorizonId(int horizonId) 
+        public async Task<PlanetMongoDTO> GetByHorizonId(int horizonId)
         {
             return await _planetRepoMongoDB.GetByHorizonId(horizonId);
         }
 
 
-        public async Task<EphemerisMongoDTO> GetLocationByHorizonIdAndDate(int horizonId, DateTime date) 
+        public async Task<EphemerisMongoDTO> GetLocationByHorizonIdAndDate(int horizonId, DateTime date)
         {
 
             return await _planetRepoMongoDB.GetLocationByHorizonIdAndDate(horizonId, date);
         }
 
-        public async Task<List<EphemerisMongoDTO>> GetLocationsByHorizonId(int horizonId) 
+        public async Task<List<EphemerisMongoDTO>> GetLocationsByHorizonId(int horizonId)
         {
             return await _planetRepoMongoDB.GetLocationsByHorizonId(horizonId);
         }
 
-        public async Task<PlanetMongoDTO> GetByName(string name) 
+        public async Task<PlanetMongoDTO> GetByName(string name)
         {
             return await _planetRepoMongoDB.GetByName(name);
         }

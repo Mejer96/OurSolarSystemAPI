@@ -1,9 +1,9 @@
-using System.Text.Json.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
 namespace OurSolarSystemAPI.Models
 {
-    public class TleArtificialSatellite() 
+    public class TleArtificialSatellite()
     {
         [BsonIgnore]
         public int Id { get; set; }
@@ -15,7 +15,7 @@ namespace OurSolarSystemAPI.Models
         public ArtificialSatellite ArtificialSatellite { get; set; }
         public string TleFirstLine { get; set; }
         public string TleSecondLine { get; set; }
-        public DateTime ScrapedAt { get; set; } 
+        public DateTime ScrapedAt { get; set; }
 
         public bool IsArchived { get; set; }
     }

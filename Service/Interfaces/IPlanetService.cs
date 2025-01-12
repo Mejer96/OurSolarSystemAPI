@@ -1,4 +1,4 @@
-namespace OurSolarSystemAPI.Service.Interfaces 
+namespace OurSolarSystemAPI.Service.Interfaces
 {
     interface IPlanetService<T>
     {

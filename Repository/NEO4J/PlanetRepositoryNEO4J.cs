@@ -3,9 +3,9 @@ using Neo4j.Driver.Mapping;
 using OurSolarSystemAPI.Models;
 using System.Text.Json;
 
-namespace OurSolarSystemAPI.Repository.NEO4J 
+namespace OurSolarSystemAPI.Repository.NEO4J
 {
-    public class PlanetRepositoryNEO4J 
+    public class PlanetRepositoryNEO4J
     {
         private readonly IDriver _driver;
         private readonly JsonSerializerOptions SerializerOptions = new() { WriteIndented = true };
@@ -119,8 +119,8 @@ namespace OurSolarSystemAPI.Repository.NEO4J
 
                     if (properties != null)
                     {
-                        
-                        return JsonSerializer.Serialize(properties, SerializerOptions); 
+
+                        return JsonSerializer.Serialize(properties, SerializerOptions);
                     }
 
                     return null;
@@ -157,8 +157,8 @@ namespace OurSolarSystemAPI.Repository.NEO4J
 
                     if (properties != null)
                     {
-                        
-                        return JsonSerializer.Serialize(properties, SerializerOptions); 
+
+                        return JsonSerializer.Serialize(properties, SerializerOptions);
                     }
 
                     return null;
@@ -266,16 +266,16 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                         name
                     };
                     var cursor = await tx.RunAsync(query, parameters);
-                    var record = await cursor.SingleAsync(); 
+                    var record = await cursor.SingleAsync();
 
                     var properties = record?["planet"].As<INode>()?.Properties;
 
                     if (properties != null)
                     {
-                        return JsonSerializer.Serialize(properties, SerializerOptions);    
+                        return JsonSerializer.Serialize(properties, SerializerOptions);
                     }
 
-                    return null; 
+                    return null;
                 });
 
                 return result;
@@ -303,16 +303,16 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                         horizonId
                     };
                     var cursor = await tx.RunAsync(query, parameters);
-                    var record = await cursor.SingleAsync(); 
+                    var record = await cursor.SingleAsync();
 
                     var properties = record?["planet"].As<INode>()?.Properties;
 
                     if (properties != null)
                     {
-                        return JsonSerializer.Serialize(properties, SerializerOptions);    
+                        return JsonSerializer.Serialize(properties, SerializerOptions);
                     }
 
-                    return null; 
+                    return null;
                 });
 
                 return result;
@@ -323,5 +323,5 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             }
         }
     }
-    
+
 }

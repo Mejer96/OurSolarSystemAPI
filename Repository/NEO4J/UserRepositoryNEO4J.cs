@@ -1,23 +1,22 @@
 using Neo4j.Driver;
-using Neo4j.Driver.Mapping;
 using OurSolarSystemAPI.Models;
 
-namespace OurSolarSystemAPI.Repository.NEO4J 
+namespace OurSolarSystemAPI.Repository.NEO4J
 {
-    public class UserDtoResponse 
+    public class UserDtoResponse
     {
         public required string Username { get; set; }
         public required int Id { get; set; }
     }
 
-    public class UserDtoResponseWithPasswordAndSalt 
+    public class UserDtoResponseWithPasswordAndSalt
     {
         public required string Username { get; set; }
         public required int Id { get; set; }
         public required string Password { get; set; }
         public required string Salt { get; set; }
     }
-    public class UserRepositoryNEO4J 
+    public class UserRepositoryNEO4J
     {
         private readonly IDriver _driver;
 
@@ -36,12 +35,12 @@ namespace OurSolarSystemAPI.Repository.NEO4J
 
             };
         }
-        public async Task<UserDtoResponse> CreateUser(UserEntity user) 
+        public async Task<UserDtoResponse> CreateUser(UserEntity user)
         {
             await using var session = _driver.AsyncSession();
 
             Dictionary<string, object?> userAttributes = ConvertUserObjectToDict(user);
-           
+
 
             var parameters = new Dictionary<string, object>
             {
@@ -67,15 +66,15 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             return result;
         }
 
-        public async Task<UserDtoResponseWithPasswordAndSalt> GetUserWithPasswordAndSalt(string username) 
+        public async Task<UserDtoResponseWithPasswordAndSalt> GetUserWithPasswordAndSalt(string username)
         {
             await using var session = _driver.AsyncSession();
 
             var query = @"
                 MATCH (u:User {username: $username})
-                RETURN id(u) AS id, u.username AS username, u.salt as salt, u.password as password"; 
+                RETURN id(u) AS id, u.username AS username, u.salt as salt, u.password as password";
 
-      
+
             var parameters = new Dictionary<string, object>
             {
                 { "username", username }
@@ -106,9 +105,9 @@ namespace OurSolarSystemAPI.Repository.NEO4J
 
             var query = @"
                 MATCH (u:User {username: $username})
-                RETURN id(u) AS id, u.username AS username"; 
+                RETURN id(u) AS id, u.username AS username";
 
-      
+
             var parameters = new Dictionary<string, object>
             {
                 { "username", username }
@@ -136,9 +135,9 @@ namespace OurSolarSystemAPI.Repository.NEO4J
 
             var query = @"
                 MATCH (u:User {username: $username})
-                RETURN id(u) AS id, u.username AS username"; 
+                RETURN id(u) AS id, u.username AS username";
 
-      
+
             var parameters = new Dictionary<string, object>
             {
                 { "Id", userId }
@@ -174,12 +173,12 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                 { "userId", userId }
             };
 
-        
+
             var result = await session.ExecuteWriteAsync(async tx =>
             {
                 var cursor = await tx.RunAsync(query, parameters);
 
-                 var summary = await cursor.ConsumeAsync();
+                var summary = await cursor.ConsumeAsync();
                 return summary.Counters.NodesDeleted > 0;
             });
 
@@ -190,7 +189,7 @@ namespace OurSolarSystemAPI.Repository.NEO4J
         {
             await using var session = _driver.AsyncSession();
 
-           
+
             var query = @"
                 MATCH (u:User)
                 WHERE id(u) = $userId

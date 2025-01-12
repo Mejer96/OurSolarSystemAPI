@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using OurSolarSystemAPI.Service.MySQL;
 using OurSolarSystemAPI.Repository.MySQL;
+using OurSolarSystemAPI.Service.MySQL;
 namespace OurSolarSystemAPI.Controllers;
 
 [ApiController]
@@ -11,7 +11,7 @@ public class ScrapingControllerMySQL : ControllerBase
     private readonly ScrapingServiceMySQL _scrapingService;
     private readonly HttpClient _httpClient;
 
-    public ScrapingControllerMySQL(ScrapingServiceMySQL scrapingService, OurSolarSystemContext context, HttpClient httpClient) 
+    public ScrapingControllerMySQL(ScrapingServiceMySQL scrapingService, OurSolarSystemContext context, HttpClient httpClient)
     {
         _scrapingService = scrapingService;
         _context = context;
@@ -23,9 +23,9 @@ public class ScrapingControllerMySQL : ControllerBase
         var dict = await _scrapingService.ScrapeBarycentersTest(_httpClient);
 
         return Ok(new
-            {
-                dict
-            });
+        {
+            dict
+        });
     }
 
 
@@ -35,9 +35,9 @@ public class ScrapingControllerMySQL : ControllerBase
         await _scrapingService.ScrapeBarycenters(_httpClient);
 
         return Ok(new
-            {
-                statusCode = 200
-            });
+        {
+            statusCode = 200
+        });
     }
 
     [HttpGet("scrape-sun")]
@@ -46,9 +46,9 @@ public class ScrapingControllerMySQL : ControllerBase
         await _scrapingService.ScrapeSun(_httpClient);
 
         return Ok(new
-            {
-                statusCode = 200
-            });
+        {
+            statusCode = 200
+        });
     }
 
 
@@ -58,9 +58,9 @@ public class ScrapingControllerMySQL : ControllerBase
         await _scrapingService.ScrapePlanets(_httpClient);
 
         return Ok(new
-            {
-                statusCode = 200
-            });
+        {
+            statusCode = 200
+        });
     }
 
     [HttpGet("scrape-moons")]
@@ -69,19 +69,19 @@ public class ScrapingControllerMySQL : ControllerBase
         await _scrapingService.ScrapeMoons(_httpClient);
 
         return Ok(new
-            {
-                statusCode = 200
-            });
+        {
+            statusCode = 200
+        });
     }
 
     [HttpGet("scrape-satellites")]
     public async Task<IActionResult> GetHorizonPlanetData()
     {
-       await _scrapingService.ScrapeArtificialSatellites(_httpClient);
-        
+        await _scrapingService.ScrapeArtificialSatellites(_httpClient);
+
         return Ok(new
-            {
-                StatusCode = 200
-            });
+        {
+            StatusCode = 200
+        });
     }
-}    
+}

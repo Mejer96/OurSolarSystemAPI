@@ -1,68 +1,68 @@
 using Microsoft.AspNetCore.Mvc;
 using OurSolarSystemAPI.Service.NEO4J;
 
-namespace OurSolarSystemAPI.Controllers.NEO4J; 
+namespace OurSolarSystemAPI.Controllers.NEO4J;
 
-    [ApiController]
-    [Route("migration/neo4j")]
-    public class MigrationControllerNEO4J : ControllerBase
+[ApiController]
+[Route("migration/neo4j")]
+public class MigrationControllerNEO4J : ControllerBase
+{
+
+    private readonly MigrationServiceNEO4J _migrationService;
+
+    public MigrationControllerNEO4J(MigrationServiceNEO4J migrationService)
     {
+        _migrationService = migrationService;
+    }
 
-        private readonly MigrationServiceNEO4J _migrationService;
-       
-        public MigrationControllerNEO4J(MigrationServiceNEO4J migrationService) 
+
+    [HttpGet("migrate-barycenters")]
+    public async Task<IActionResult> ScrapeBarycenters()
+    {
+        await _migrationService.MigrateBarycenters();
+
+        return Ok(new
         {
-            _migrationService = migrationService;
-        }
+            statusCode = 200
+        });
+    }
 
+    [HttpGet("migrate-planets")]
+    public async Task<IActionResult> ScrapePlanets()
+    {
+        await _migrationService.MigratePlanets();
 
-        [HttpGet("migrate-barycenters")]
-        public async Task<IActionResult> ScrapeBarycenters() 
+        return Ok(new
         {
-            await _migrationService.MigrateBarycenters();
+            statusCode = 200
+        });
 
-            return Ok(new
-            {
-                statusCode = 200
-            });
-        }
+    }
 
-        [HttpGet("migrate-planets")]
-        public async Task<IActionResult> ScrapePlanets() 
+    [HttpGet("migrate-moons")]
+    public async Task<IActionResult> ScrapeMoons()
+    {
+        await _migrationService.MigrateMoons();
+
+        return Ok(new
         {
-            await _migrationService.MigratePlanets();
+            statusCode = 200
+        });
 
-            return Ok(new
-            {
-                statusCode = 200
-            });
- 
-        }
+    }
 
-        [HttpGet("migrate-moons")]
-        public async Task<IActionResult> ScrapeMoons() 
+    [HttpGet("migrate-satellites")]
+    public async Task<IActionResult> ScrapeSatelittes()
+    {
+        await _migrationService.MigrateArtificialSatellites();
+
+        return Ok(new
         {
-            await _migrationService.MigrateMoons();
+            statusCode = 200
+        });
 
-            return Ok(new
-            {
-                statusCode = 200
-            });
- 
-        }
-
-        [HttpGet("migrate-satellites")]
-        public async Task<IActionResult> ScrapeSatelittes() 
-        {
-            await _migrationService.MigrateArtificialSatellites();
-
-            return Ok(new
-            {
-                statusCode = 200
-            });
- 
-        }
+    }
 
 }
-    
+
 

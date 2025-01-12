@@ -1,15 +1,13 @@
-using System.Text.Json.Serialization;
-using OurSolarSystemAPI.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.ComponentModel.DataAnnotations;
+using OurSolarSystemAPI.Models;
 
 namespace OurSolarSystemAPI.Repository.MongoDB
 {
     public class BarycenterMongoDTO()
     {
         [BsonId]
-        public ObjectId Id {get; set; }
+        public ObjectId Id { get; set; }
         public required int HorizonId { get; set; }
         public required string Name { get; set; }
         public PlanetMongoDTO Planet { get; set; }
@@ -19,10 +17,9 @@ namespace OurSolarSystemAPI.Repository.MongoDB
         {
             return new BarycenterMongoDTO
             {
-                    HorizonId = barycenter.HorizonId,
-                    Name = barycenter.Name
+                HorizonId = barycenter.HorizonId,
+                Name = barycenter.Name
             };
         }
     }
 }
-    

@@ -1,17 +1,17 @@
 
 using OurSolarSystemAPI.Repository.MySQL;
-namespace OurSolarSystemAPI.Service 
+namespace OurSolarSystemAPI.Service
 {
-    public class MoonService 
+    public class MoonService
     {
-            private readonly PlanetRepositoryMySQL _planetRepo;
+        private readonly PlanetRepositoryMySQL _planetRepo;
 
-        public MoonService(PlanetRepositoryMySQL planetRepo) 
+        public MoonService(PlanetRepositoryMySQL planetRepo)
         {
-             _planetRepo = planetRepo;
+            _planetRepo = planetRepo;
         }
 
-        
+
     }
-    
+
 }

@@ -1,19 +1,19 @@
 using OurSolarSystemAPI.Auth;
 using OurSolarSystemAPI.Repository.MongoDB;
 
-namespace OurSolarSystemAPI.Service.MongoDB 
+namespace OurSolarSystemAPI.Service.MongoDB
 {
-    public class UserServiceMongoDB 
+    public class UserServiceMongoDB
     {
         private readonly UserRepositoryMongoDB _userRepo;
 
-        public UserServiceMongoDB(UserRepositoryMongoDB userRepo) 
+        public UserServiceMongoDB(UserRepositoryMongoDB userRepo)
         {
             _userRepo = userRepo;
         }
 
 
-        public async Task<UserDtoResponse> CreateUser(string username, string password, string repeatedPassword) 
+        public async Task<UserDtoResponse> CreateUser(string username, string password, string repeatedPassword)
         {
 
             if (password != repeatedPassword) throw new Exception("Passwords doesn't match");
@@ -28,12 +28,12 @@ namespace OurSolarSystemAPI.Service.MongoDB
                 Password = hashedPassword,
                 PasswordSalt = salt,
             };
-        
+
             return await _userRepo.CreateUser(user);
 
         }
 
-        public async Task<bool> DeleteUser(string username, string password, string repeatedPassword) 
+        public async Task<bool> DeleteUser(string username, string password, string repeatedPassword)
         {
             if (password != repeatedPassword) throw new Exception("Passwords doesn't match");
 
@@ -47,7 +47,7 @@ namespace OurSolarSystemAPI.Service.MongoDB
 
         }
 
-        public async Task<Boolean> UpdatePassword(string username, string oldPassword, string repeatedOldPassword, string newPassword, string repeatedNewPassword) 
+        public async Task<Boolean> UpdatePassword(string username, string oldPassword, string repeatedOldPassword, string newPassword, string repeatedNewPassword)
         {
             if (newPassword != repeatedNewPassword) throw new Exception("Passwords doesn't match");
             if (oldPassword != repeatedOldPassword) throw new Exception("Passwords doesn't match");
@@ -63,10 +63,10 @@ namespace OurSolarSystemAPI.Service.MongoDB
             return await _userRepo.UpdatePassword(user.Id, hashedNewPassword, salt);
         }
 
-        public async Task<Boolean> UpdateUsername(string oldUsername, string newUsername, string password, string repeatedPassword) 
+        public async Task<Boolean> UpdateUsername(string oldUsername, string newUsername, string password, string repeatedPassword)
         {
             if (password != repeatedPassword) throw new Exception("Passwords doesn't match");
-      
+
             UserDTOMongoDB user = await _userRepo.GetUserWithPasswordAndSalt(oldUsername);
             string hashedPassword = PasswordHasher.HashPasswordWithSalt(password, user.PasswordSalt);
 
@@ -75,6 +75,6 @@ namespace OurSolarSystemAPI.Service.MongoDB
             return await _userRepo.UpdateUsername(user.Id, newUsername);
 
         }
-        
+
     }
 }

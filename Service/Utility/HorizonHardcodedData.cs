@@ -1,10 +1,9 @@
 ﻿using OurSolarSystemAPI.Models;
-using System.Text.RegularExpressions;
 namespace OurSolarSystemAPI.Utility
 {
     public class HorizonHardcodedData
     {
-        public List<Barycenter> BarycenterData() 
+        public List<Barycenter> BarycenterData()
         {
             return new List<Barycenter>
             {
@@ -20,7 +19,7 @@ namespace OurSolarSystemAPI.Utility
             };
         }
 
-        public Star SunData() 
+        public Star SunData()
         {
             return new Star
             {
@@ -30,11 +29,11 @@ namespace OurSolarSystemAPI.Utility
                 Mass = 1988410,
                 VolumeMeanRadius = 695700,
                 Volume = 1412000,
-                SolarRadius = 695700, 
-                Radius = 696500, 
-                AngularDiameter = 1919.3, 
-                PhotosphereTemperatureBottom = 6600, 
-                PhotosphereTemperatureTop = 4400, 
+                SolarRadius = 695700,
+                Radius = 696500,
+                AngularDiameter = 1919.3,
+                PhotosphereTemperatureBottom = 6600,
+                PhotosphereTemperatureTop = 4400,
                 PhotosphericDepth = 500,
                 ChromosphericDepth = 2500,
                 Flatness = 0.00005,
@@ -43,15 +42,15 @@ namespace OurSolarSystemAPI.Utility
                 RightAscension = 286.13,
                 Declination = 63.87,
                 ObliquityToEcliptic = 7.25,
-                SolarConstantOneAu = 1367.6, 
-                Luminosity = 382.8, 
-                MassEnergyConversionRate = 4.260e9, 
+                SolarConstantOneAu = 1367.6,
+                Luminosity = 382.8,
+                MassEnergyConversionRate = 4.260e9,
                 EffectiveTemperature = 5772,
-                SunspotCycle = 11.4, 
+                SunspotCycle = 11.4,
                 Cycle24SunspotMinimum = 2008
             };
 
-        } 
+        }
 
         public Planet MercuryData()
         {
@@ -61,37 +60,37 @@ namespace OurSolarSystemAPI.Utility
                 BarycenterHorizonId = 1,
                 Name = "mercury",
                 VolumeMeanRadius = 2439.4,
-                Density = 5.427, 
-                Mass = 3.302, 
+                Density = 5.427,
+                Mass = 3.302,
                 Volume = 6.085,
-                EquatorialRadius = 2440.53, 
-                SiderealRotationPeriod = 58.6463, 
+                EquatorialRadius = 2440.53,
+                SiderealRotationPeriod = 58.6463,
                 SiderealRotationRate = 0.00000124001,
-                MeanSolarDay = 175.9421, 
-                PolarGravity = null, 
-                EquatorialGravity = 3.701, 
-                GeometricAlbedo = 0.106, 
-                MassRatioToSun = 6023682, 
-                MeanTemperature = 440, 
-                AtmosphericPressure = null, 
-                ObliquityToOrbit = 2.11, 
-                MaxAngularDiameter = 11.0, 
+                MeanSolarDay = 175.9421,
+                PolarGravity = null,
+                EquatorialGravity = 3.701,
+                GeometricAlbedo = 0.106,
+                MassRatioToSun = 6023682,
+                MeanTemperature = 440,
+                AtmosphericPressure = null,
+                ObliquityToOrbit = 2.11,
+                MaxAngularDiameter = 11.0,
                 MeanSideRealOrbitalPeriod = 87.969257,
-                OrbitalSpeed = 47.362, 
+                OrbitalSpeed = 47.362,
                 HillsSphereRadius = 94.4,
-                EscapeSpeed = 4.435, 
-                GravitationalParameter = 22031.86855, 
-                Moons = null, 
-                Ephemeris = null, 
-                SolarConstantPerihelion = 14462, 
-                SolarConstantAphelion = 6278, 
-                SolarConstantMean = 9126, 
-                MaxPlanetaryIRPerihelion = 12700, 
-                MaxPlanetaryIRAphelion = 5500, 
-                MaxPlanetaryIRMean = 8000, 
+                EscapeSpeed = 4.435,
+                GravitationalParameter = 22031.86855,
+                Moons = null,
+                Ephemeris = null,
+                SolarConstantPerihelion = 14462,
+                SolarConstantAphelion = 6278,
+                SolarConstantMean = 9126,
+                MaxPlanetaryIRPerihelion = 12700,
+                MaxPlanetaryIRAphelion = 5500,
+                MaxPlanetaryIRMean = 8000,
                 MinPlanetaryIRPerihelion = 6,
                 MinPlanetaryIRAphelion = 6,
-                MinPlanetaryIRMean = 6 
+                MinPlanetaryIRMean = 6
             };
         }
 
@@ -433,5 +432,5 @@ namespace OurSolarSystemAPI.Utility
                 MinPlanetaryIRMean = 0.5
             };
         }
-}
+    }
 }

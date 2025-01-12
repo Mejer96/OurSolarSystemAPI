@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -7,7 +6,7 @@ using System.Text;
 
 namespace OurSolarSystemAPI.Auth
 {
-    public class JwtTokenGenerator 
+    public class JwtTokenGenerator
     {
         public static string GenerateJwtToken(string username, string role)
         {

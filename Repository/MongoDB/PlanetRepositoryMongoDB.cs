@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
-using System.Linq.Expressions;
 
 namespace OurSolarSystemAPI.Repository.MongoDB
 {
@@ -43,7 +42,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
             EphemerisMongoDTO firstEphemeris = await _ephemeris
                 .Find(e => e.CelestialBodyHorizonId == firstHorizonId && e.DateTime == dateTime.Date)
                 .FirstOrDefaultAsync();
-            
+
             EphemerisMongoDTO secondEphemeris = await _ephemeris
                 .Find(e => e.CelestialBodyHorizonId == secondHorizonId && e.DateTime == dateTime.Date)
                 .FirstOrDefaultAsync();
@@ -53,7 +52,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
 
         public async Task<EphemerisMongoDTO> GetLocationByHorizonIdAndDate(int horizonId, DateTime dateTime)
         {
-    
+
             var ephemeris = await _ephemeris
                 .Find(e => e.CelestialBodyHorizonId == horizonId && e.DateTime == dateTime)
                 .FirstOrDefaultAsync();

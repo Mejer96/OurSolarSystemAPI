@@ -1,17 +1,17 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using OurSolarSystemAPI.Repository.MySQL;
-using OurSolarSystemAPI.Repository.NEO4J;
-using OurSolarSystemAPI.Service.MySQL;
-using OurSolarSystemAPI.Service.NEO4J;
-using OurSolarSystemAPI.Service.MongoDB;
 using Microsoft.OpenApi.Models;
 using Neo4j.Driver;
 using OurSolarSystemAPI.Repository;
-using OurSolarSystemAPI.Service;
 using OurSolarSystemAPI.Repository.MongoDB;
+using OurSolarSystemAPI.Repository.MySQL;
+using OurSolarSystemAPI.Repository.NEO4J;
+using OurSolarSystemAPI.Service;
+using OurSolarSystemAPI.Service.MongoDB;
+using OurSolarSystemAPI.Service.MySQL;
+using OurSolarSystemAPI.Service.NEO4J;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -127,10 +127,10 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<OurSolarSystemContext>();
-        dbContext.Database.EnsureCreated(); // This creates the database if it does not exist
-    }
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<OurSolarSystemContext>();
+    dbContext.Database.EnsureCreated(); // This creates the database if it does not exist
+}
 
 
 // Configure the HTTP request pipeline.
