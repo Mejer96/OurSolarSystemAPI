@@ -27,6 +27,12 @@ namespace OurSolarSystemAPI.Models
         public double ScaledPositionY { get; set; }
         [NotMapped]
         public double ScaledPositionZ { get; set; }
+        [NotMapped]
+        public double ScaledVelocityX { get; set; }
+        [NotMapped]
+        public double ScaledVelocityY { get; set; }
+        [NotMapped]
+        public double ScaledVelocityZ { get; set; }
 
         public Dictionary<string, object> ConvertObjectToDictNEO4J() 
         {

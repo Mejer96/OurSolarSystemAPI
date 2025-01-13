@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using OurSolarSystemAPI.Service.MySQL;
 using OurSolarSystemAPI.Models;
 using OurSolarSystemAPI.Repository.MySQL;
+using OurSolarSystemAPI.Controllers.ExceptionHandler;
 
 namespace OurSolarSystemAPI.Controllers.MySQL 
 {
@@ -19,59 +20,119 @@ namespace OurSolarSystemAPI.Controllers.MySQL
         [HttpGet("get-by-horizon-id")]
         public async Task<IActionResult> RequestByHorizonId(int horizonId) 
         {
-            Planet planet = await _planetService.GetByHorizonId(horizonId);
+            try 
+            {
+                Planet planet = await _planetService.GetByHorizonId(horizonId);
+                return Ok(planet);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
+            
+        }
 
-            return Ok(planet);
+        [HttpGet("get-all")]
+        public async Task<IActionResult> RequestAll() 
+        {
+            try
+            {
+                List<Planet> planets = await _planetService.GetAll();
+                return Ok(planets);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
         [HttpGet("get-location-by-horizon-id-and-date")]
         public async Task<IActionResult> RequestLocationByHorizonIdAndDate(int horizonId, int day, int month, int year) 
         {
-            Planet planet = await _planetService.GetLocationByHorizonIdAndDate(horizonId, new DateTime(year, month, day));
-
-            return Ok(planet);
+            try 
+            {
+                Planet planet = await _planetService.GetLocationByHorizonIdAndDate(horizonId, new DateTime(year, month, day));
+                return Ok(planet);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
         [HttpGet("get-current-location-by-horizon-id")]
         public async Task<IActionResult> RequestCurrentLocation(int horizonId) 
         {
-            Planet planet = await _planetService.GetLocationByHorizonIdAndDate(horizonId, DateTime.Now.Date);
-
-            return Ok(planet);
+            try 
+            {
+                Planet planet = await _planetService.GetLocationByHorizonIdAndDate(horizonId, DateTime.Now.Date);
+                return Ok(planet);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
         [HttpGet("get-distance-between")]
         public async Task<IActionResult> RequestDistanceBetween(int firstHorizonId, int secondHorizonId, int day, int month, int year) 
         {
-            DistanceResult result = await _planetService.GetDistance(firstHorizonId, secondHorizonId, new DateTime(year, month, day));
-
-            return Ok(result);
+            try 
+            {
+                DistanceResult result = await _planetService.GetDistance(firstHorizonId, secondHorizonId, new DateTime(year, month, day));
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
 
         [HttpGet("get-locations-by-horizon-id")]
         public async Task<IActionResult> RequestLocationsByHorizonId(int horizonId) 
-        {
-            Planet planet = await _planetService.GetLocationsByHorizonId(horizonId);
+        {   
+            try 
+            {
+                Planet planet = await _planetService.GetLocationsByHorizonId(horizonId);
+                return Ok(planet);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
 
-            return Ok(planet);
+           
         }
 
         [HttpGet("get-by-name")]
         public async Task<IActionResult> RequestByName(string name) 
         {
-            Planet planet = await _planetService.GetByName(name);
+            try 
+            {
+                Planet planet = await _planetService.GetByName(name);
+                return Ok(planet);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
 
-            return Ok(planet);
         }
 
 
         [HttpGet("get-locations-with-pagination-by-horizon-id")]
         public async Task<IActionResult> RequestPlanetEphemerisWithPagination(int horizonId, int pageNumber, int pageSize) 
         {
-            List<EphemerisPlanet> data = await _planetService.GetEphemerisWithPagination(horizonId, pageNumber, pageSize);
-
-            return Ok(data);
+            try 
+            {
+                List<EphemerisPlanet> data = await _planetService.GetEphemerisWithPagination(horizonId, pageNumber, pageSize);
+                return Ok(data);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
     }

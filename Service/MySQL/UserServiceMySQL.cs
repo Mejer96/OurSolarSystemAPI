@@ -1,6 +1,8 @@
 using OurSolarSystemAPI.Auth;
 using OurSolarSystemAPI.Models;
 using OurSolarSystemAPI.Repository;
+using OurSolarSystemAPI.Exceptions;
+
 namespace OurSolarSystemAPI.Service.MySQL 
 {
     public class UserServiceMySQL 
@@ -15,7 +17,7 @@ namespace OurSolarSystemAPI.Service.MySQL
         public async Task<UserDto> CreateUser(string username, string password, string repeatedPassword) 
         {
 
-            if (password != repeatedPassword) throw new Exception("Passwords doesn't match");
+            if (password != repeatedPassword) throw new PasswordsNotMatching("Passwords are not matching");
 
             (byte[] saltBytes, string salt) = PasswordHasher.GenerateSalt();
             string hashedPassword = PasswordHasher.HashPasswordWithSalt(password, salt);
@@ -36,15 +38,26 @@ namespace OurSolarSystemAPI.Service.MySQL
             return await _userRepo.GetUserByUsername(username);
         }
 
+        public async Task<Boolean> GetUserByUsernameAndPassword(string username, string password) 
+        {
+            UserEntity user = await _userRepo.GetUserByNameWithSaltAndPassword(username);
+            string hashedPassword = PasswordHasher.HashPasswordWithSalt(password, user.PasswordSalt);
+
+            if (hashedPassword != user.Password) throw new AuthenticationFailed("authentication failed");
+
+            return true;
+
+        }
+
         public async Task<bool> DeleteUser(string username, string password, string repeatedPassword) 
         {
-            if (password != repeatedPassword) throw new Exception("Passwords doesn't match");
+            if (password != repeatedPassword) throw new PasswordsNotMatching("Passwords are not matching");
 
-            UserEntity user = await _userRepo.GetUserByWithSaltAndPassword(username);
+            UserEntity user = await _userRepo.GetUserByNameWithSaltAndPassword(username);
 
             string hashedPassword = PasswordHasher.HashPasswordWithSalt(password, user.PasswordSalt);
 
-            if (hashedPassword != user.Password) throw new Exception("Incorrect password");
+            if (hashedPassword != user.Password) throw new InvalidPassword("Incorrect password");
 
             return await _userRepo.DeleteUser(user.Id);
 
@@ -52,13 +65,13 @@ namespace OurSolarSystemAPI.Service.MySQL
 
         public async Task<UserDto> UpdatePassword(string username, string oldPassword, string repeatedOldPassword, string newPassword, string repeatedNewPassword) 
         {
-            if (newPassword != repeatedNewPassword) throw new Exception("Passwords doesn't match");
-            if (oldPassword != repeatedOldPassword) throw new Exception("Passwords doesn't match");
+            if (newPassword != repeatedNewPassword) throw new PasswordsNotMatching("New Passwords are not matching");
+            if (oldPassword != repeatedOldPassword) throw new PasswordsNotMatching("Old Passwords are not matching");
 
-            UserEntity user = await _userRepo.GetUserByWithSaltAndPassword(username);
+            UserEntity user = await _userRepo.GetUserByNameWithSaltAndPassword(username);
             string hashedPassword = PasswordHasher.HashPasswordWithSalt(oldPassword, user.PasswordSalt);
 
-            if (hashedPassword != user.Password) throw new Exception("Incorrect password");
+            if (hashedPassword != user.Password) throw new InvalidPassword("Incorrect password");
 
             (byte[] saltBytes, string salt) = PasswordHasher.GenerateSalt();
             string hashedNewPassword = PasswordHasher.HashPasswordWithSalt(newPassword, salt);
@@ -71,12 +84,12 @@ namespace OurSolarSystemAPI.Service.MySQL
 
         public async Task<UserDto> UpdateUsername(string oldUsername, string newUsername, string password, string repeatedPassword) 
         {
-            if (password != repeatedPassword) throw new Exception("Passwords doesn't match");
+            if (password != repeatedPassword) throw new PasswordsNotMatching("Passwords are not matching");
             
-            UserEntity user = await _userRepo.GetUserByWithSaltAndPassword(oldUsername);
+            UserEntity user = await _userRepo.GetUserByNameWithSaltAndPassword(oldUsername);
             string hashedPassword = PasswordHasher.HashPasswordWithSalt(password, user.PasswordSalt);
 
-            if (hashedPassword != user.Password) throw new Exception("Incorrect password");
+            if (hashedPassword != user.Password) throw new InvalidPassword("Incorrect password");
 
             user.Username = newUsername;
             return await _userRepo.UpdateUser(user);

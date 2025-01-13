@@ -7,4 +7,10 @@ namespace OurSolarSystemAPI.Models
         public required string RepeatedPassword { get; set; }
     }
 
+        public class AuthenticateUserDto
+    {
+        public required string Username { get; set; }
+        public required string Password { get; set; }
+    }
+
 }

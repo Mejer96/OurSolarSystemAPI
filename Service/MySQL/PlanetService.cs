@@ -14,6 +14,13 @@ namespace OurSolarSystemAPI.Service.MySQL
         {
             _planetRepo = planetRepo;
         }
+
+        public async Task<List<Planet>> GetAll() 
+        {
+            return await _planetRepo.GetAll();
+
+        }
+
         public async Task<DistanceResult> GetDistance(int firstHorizonId, int secondHorizonId, DateTime date) 
         {
             return await _planetRepo.GetDistance(firstHorizonId, secondHorizonId, date);
@@ -40,7 +47,24 @@ namespace OurSolarSystemAPI.Service.MySQL
 
         public async Task<Planet> GetLocationsByHorizonId(int horizonId) 
         {
-            return await _planetRepo.GetLocationsByHorizonId(horizonId);
+            var planet = await _planetRepo.GetLocationsByHorizonId(horizonId);
+            var secondsInAYear = 365 * 24 * 60 * 60;
+
+            double scalingFactor = 1.738528300513934e-22;
+            foreach (EphemerisPlanet ephemeris in planet.Ephemeris) 
+            {
+                    ephemeris.ScaledPositionX = ephemeris.PositionX * scalingFactor;
+                    ephemeris.ScaledPositionY = ephemeris.PositionY * scalingFactor;
+                    ephemeris.ScaledPositionZ = ephemeris.PositionZ * scalingFactor;
+                    double scaledVelocityPerSecondsX = ephemeris.VelocityX * scalingFactor;
+                    double scaledVelocityPerSecondsY = ephemeris.VelocityY * scalingFactor;
+                    double scaledVelocityPerSecondsZ = ephemeris.VelocityZ * scalingFactor;
+                    ephemeris.ScaledVelocityX = scaledVelocityPerSecondsX * secondsInAYear;
+                    ephemeris.ScaledVelocityY = scaledVelocityPerSecondsY * secondsInAYear;
+                    ephemeris.ScaledVelocityZ = scaledVelocityPerSecondsZ * secondsInAYear;
+            }
+
+            return planet;
         }
 
 

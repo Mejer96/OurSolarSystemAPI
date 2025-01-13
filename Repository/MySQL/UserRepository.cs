@@ -1,6 +1,7 @@
 ﻿using OurSolarSystemAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using OurSolarSystemAPI.Repository.MySQL;
+using OurSolarSystemAPI.Exceptions;
 
 namespace OurSolarSystemAPI.Repository
 {
@@ -38,14 +39,14 @@ namespace OurSolarSystemAPI.Repository
                     Username = u.Username,
                     Id = u.Id
                 })
-            .FirstOrDefaultAsync() ?? throw new Exception();
+            .FirstOrDefaultAsync() ?? throw new EntityNotFound("No user found by that id");
 
         }
 
-        public async Task<UserEntity> GetUserByWithSaltAndPassword(string username) 
+        public async Task<UserEntity> GetUserByNameWithSaltAndPassword(string username) 
         {
             return await _context.Users.Where(u => u.Username == username)
-            .FirstOrDefaultAsync() ?? throw new Exception();
+            .FirstOrDefaultAsync() ?? throw new EntityNotFound("No user found by that id");
         }
 
         public async Task<UserDto> GetUserByUsername(string username) 
@@ -56,7 +57,7 @@ namespace OurSolarSystemAPI.Repository
                     Username = u.Username,
                     Id = u.Id
                 })
-            .FirstOrDefaultAsync() ?? throw new Exception();
+            .FirstOrDefaultAsync() ?? throw new EntityNotFound("No user found by that username");
         }
 
         public async Task<UserDto> GetUserByUsernameAndPassword(string username, string password) 
@@ -67,29 +68,23 @@ namespace OurSolarSystemAPI.Repository
                     Username = u.Username,
                     Id = u.Id
                 })
-            .FirstOrDefaultAsync() ?? throw new Exception();
+            .FirstOrDefaultAsync() ?? throw new EntityNotFound("No user found by that id");
 
         }
 
         public async Task<UserDto> CreateUser(UserEntity user)
         {
-            try
-            {
-                await _context.Users.AddAsync(user);
-                await _context.SaveChangesAsync();
 
-                return new UserDto
+            await _context.Users.AddAsync(user);
+            var result = await _context.SaveChangesAsync();
+
+            if (result != 1) throw new SomethingWentWrong("Something went wrong. User not created");
+
+            return new UserDto
                 {
                     Username = user.Username,
                     Id = user.Id
                 };
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                Console.WriteLine($"Error saving user: {ex.Message}");
-                throw;
-            }
         }
 
         public async Task<bool> DeleteUser(int userId) 
@@ -98,13 +93,17 @@ namespace OurSolarSystemAPI.Repository
             .Where(u => u.Id == userId)
             .ExecuteDeleteAsync();
 
-            return result > 0;
+            if (result != 1) throw new EntityNotFound("No user found by that id");
+  
+            return true;
         }
 
         public async Task<UserDto> UpdateUser(UserEntity user) 
         {
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+
+             if (result != 1) throw new EntityNotFound("User not updated");
 
             return new UserDto
                 {

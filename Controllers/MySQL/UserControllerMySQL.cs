@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OurSolarSystemAPI.Models;
 using OurSolarSystemAPI.Service.MySQL;
-
+using OurSolarSystemAPI.Controllers.ExceptionHandler;
 namespace OurSolarSystemAPI.Controllers.MySQL 
 {
     [ApiController]
@@ -9,6 +9,7 @@ namespace OurSolarSystemAPI.Controllers.MySQL
     public class UserControllerMySQL : ControllerBase 
     {
         private readonly UserServiceMySQL _userService;
+       
 
         public UserControllerMySQL(UserServiceMySQL userService) 
         {
@@ -18,36 +19,85 @@ namespace OurSolarSystemAPI.Controllers.MySQL
         [HttpPost("create-user")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userInfo) 
         {
-            var user = await _userService.CreateUser(userInfo.Username, userInfo.Password, userInfo.RepeatedPassword);
-            return Ok(user);
+            try 
+            {
+                var user = await _userService.CreateUser(userInfo.Username, userInfo.Password, userInfo.RepeatedPassword);
+                return Created("", user);
+            } 
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
+        }
+
+        [HttpPost("authenticate-user")]
+        public async Task<IActionResult> AuthenticateUser([FromBody] AuthenticateUserDto userInfo) 
+        {
+            try 
+            {
+                var isAuthenticated = await _userService.GetUserByUsernameAndPassword(userInfo.Username, userInfo.Password);
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
         [HttpGet("get-user-by-username")]
         public async Task<IActionResult> RequestUserByUsername(string username) 
         {
-            var user = await _userService.GetUserByUsername(username);
-            return Ok(user);
+            try 
+            {
+                var user = await _userService.GetUserByUsername(username);
+                return Ok(user);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
         [HttpPut("update-username")]
         public async Task<IActionResult> UpdateUsername(string oldUsername, string newUsername, string password, string repeatedPassword) 
         {
-            var user = await _userService.UpdateUsername(oldUsername, newUsername, password, repeatedPassword);
-            return Ok(user);
+            try 
+            {
+                var user = await _userService.UpdateUsername(oldUsername, newUsername, password, repeatedPassword);
+                return Ok(user);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
         [HttpPut("update-password")]
         public async Task<IActionResult> UpdatePassword(string username, string oldPassword, string repeatedOldPassword, string newPassword, string repeatedNewPassword) 
         {
-            var user = await _userService.UpdatePassword(username, oldPassword, repeatedOldPassword, newPassword, repeatedNewPassword);
-            return Ok(user);
+            try 
+            {
+                var user = await _userService.UpdatePassword(username, oldPassword, repeatedOldPassword, newPassword, repeatedNewPassword);
+                return Ok(user);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
         [HttpDelete("delete-user")]
         public async Task<IActionResult> DeleteUser(string username, string password, string repeatedPassword) 
         {
-            var isDeleted = await _userService.DeleteUser(username, password, repeatedPassword);
-            return Ok(isDeleted);
+            try 
+            {
+                var isDeleted = await _userService.DeleteUser(username, password, repeatedPassword);
+                return Ok(isDeleted);
+            }
+            catch (Exception exception)
+            {
+                return ControllerExceptionHandler.HandleException(exception, this);
+            }
         }
 
     }

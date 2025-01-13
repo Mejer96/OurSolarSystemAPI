@@ -2,6 +2,7 @@ using System.Data.Common;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using OurSolarSystemAPI.Models;
+using OurSolarSystemAPI.Exceptions;
 using MySqlConnector;
 
 
@@ -40,36 +41,48 @@ namespace OurSolarSystemAPI.Repository.MySQL
         {
             return await _context.Sun
             .Include(s => s.Ephemeris)
-            .FirstOrDefaultAsync(s => s.HorizonId == 10);
+            .FirstOrDefaultAsync(s => s.HorizonId == 10) ?? throw new EntityNotFound("Sun not found by that horizon id");
         }
 
 
         public async Task<List<Planet>> GetAllPlanetsWithMoons() 
         {
-            return await _context.Planets
+            var planets = await _context.Planets
             .Include(p => p.Moons)
             .ToListAsync();
+
+            if (!planets.Any()) throw new EntityNotFound("No planets found");
+
+            return planets;
         }
 
         public async Task<List<Planet>> GetAllPlanetsWithEphemeris() 
         {
-            return await _context.Planets
+            var planets = await _context.Planets
             .Include(p => p.Ephemeris)
             .ToListAsync();
+
+            if (!planets.Any()) throw new EntityNotFound("No planets found");
+
+            return planets;
         }
 
         public async Task<List<Planet>> GetAllPlanetsWithEphemerisAndMoons() 
         {
-            return await _context.Planets
+            var planets = await _context.Planets
             .Include(p => p.Ephemeris)
             .Include(p => p.Moons)
             .ToListAsync();
+
+            if (!planets.Any()) throw new EntityNotFound("No planets found");
+
+            return planets;
         }
 
 
         public async Task<Planet?> GetByHorizonId(int horizonId) 
         {
-            return await _context.Planets.FirstOrDefaultAsync(p => p.HorizonId == horizonId);
+            return await _context.Planets.FirstOrDefaultAsync(p => p.HorizonId == horizonId) ?? throw new EntityNotFound("Planet not found by that horizon id");
         }
 
         public async Task<Planet?> GetLocationsByHorizonId(int horizonId)
@@ -77,14 +90,22 @@ namespace OurSolarSystemAPI.Repository.MySQL
             return await _context.Planets
                 .Where(p => p.HorizonId == horizonId)
                 .Include(p => p.Ephemeris)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync() ?? throw new EntityNotFound("Planet not found by that horizon id");
+        }
+
+        public async Task<List<Planet?>> GetAll()
+        {
+            var planets = await _context.Planets.ToListAsync();
+            if (!planets.Any()) throw new EntityNotFound("No planets found");
+
+            return planets;
         }
 
         public async Task<Planet?> GetByName(string name)
         {
             return await _context.Planets
                 .Where(p => p.Name == name)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync() ?? throw new EntityNotFound("Planet not found by that name");
         }
 
         public async Task<Planet?> GetLocationByHorizonIdAndDate(int horizonId, DateTime date) 
@@ -92,7 +113,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
             return await _context.Planets
                 .Include(p => p.Ephemeris.Where(e => e.DateTime == date))
                 .Where(p => p.HorizonId == horizonId)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync() ?? throw new EntityNotFound("Planet not found by that horizon id and date");
         }
 
         public async Task<DistanceResult> GetDistance(int firstHorizonId, int secondHorizonId, DateTime date)
