@@ -101,8 +101,6 @@ namespace OurSolarSystemAPI.Controllers.MySQL
             {
                 return ControllerExceptionHandler.HandleException(exception, this);
             }
-
-           
         }
 
         [HttpGet("get-by-name")]
@@ -117,7 +115,6 @@ namespace OurSolarSystemAPI.Controllers.MySQL
             {
                 return ControllerExceptionHandler.HandleException(exception, this);
             }
-
         }
 
 
@@ -134,7 +131,6 @@ namespace OurSolarSystemAPI.Controllers.MySQL
                 return ControllerExceptionHandler.HandleException(exception, this);
             }
         }
-
     }
 
 }
