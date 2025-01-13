@@ -361,3 +361,13 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore build output directories
+bin/
+obj/
+
+# Ensure .csproj files are not ignored
+!*.csproj
+
+# Ensure test project files are not ignored
+!OurSolarSystemTest/
