@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Tests\ApiTests\Api Tests - User and priviledges.postman_collection (1).json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
@@ -32,6 +36,10 @@
 
   <ItemGroup>
     <Folder Include="Resourceses\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Tests\ApiTests\Api Tests - User and priviledges.postman_collection (1).json" />
   </ItemGroup>
 
 </Project>
