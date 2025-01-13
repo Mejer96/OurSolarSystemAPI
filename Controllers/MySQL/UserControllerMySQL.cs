@@ -99,6 +99,5 @@ namespace OurSolarSystemAPI.Controllers.MySQL
                 return ControllerExceptionHandler.HandleException(exception, this);
             }
         }
-
     }
 }
