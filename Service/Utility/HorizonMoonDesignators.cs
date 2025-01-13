@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
-
 namespace OurSolarSystemAPI.Utility
 {
     public struct HorizonMoonDesignators(int id, string name, string designation)
@@ -20,7 +16,7 @@ namespace OurSolarSystemAPI.Utility
         public int BarycenterHorizonId = barycenterHorizonId;
 
 
-        public static List<MoonContainer> InstantiatePlanetAndMoonStructs() 
+        public static List<MoonContainer> InstantiatePlanetAndMoonStructs()
         {
             var earthMoons = new List<HorizonMoonDesignators>
             {
@@ -109,7 +105,7 @@ namespace OurSolarSystemAPI.Utility
                 new HorizonMoonDesignators(572, "(Unnamed 2011J1)", "")
             };
 
-            var saturnMoons = new List<HorizonMoonDesignators> 
+            var saturnMoons = new List<HorizonMoonDesignators>
             {
                 new HorizonMoonDesignators(601, "Mimas", "SI"),
                 new HorizonMoonDesignators(602, "Enceladus", "SII"),
@@ -162,10 +158,10 @@ namespace OurSolarSystemAPI.Utility
                 new HorizonMoonDesignators(650, "Anthe", "SXLXII"),
                 new HorizonMoonDesignators(651, "Unnamed 2004S20", "SXLXIII"),
                 new HorizonMoonDesignators(652, "Unnamed 2006S1", "SXLXIV"),
-                new HorizonMoonDesignators(653, "Unnamed 2004S23", "SXLXV") 
+                new HorizonMoonDesignators(653, "Unnamed 2004S23", "SXLXV")
             };
 
-            var uranusMoons = new List<HorizonMoonDesignators> 
+            var uranusMoons = new List<HorizonMoonDesignators>
             {
                 new HorizonMoonDesignators(701, "Miranda", "UI"),
                 new HorizonMoonDesignators(702, "Ariel", "UII"),
@@ -186,7 +182,7 @@ namespace OurSolarSystemAPI.Utility
                 new HorizonMoonDesignators(717, "Cupid", "UXVII")
             };
 
-            var neptuneMoons = new List<HorizonMoonDesignators> 
+            var neptuneMoons = new List<HorizonMoonDesignators>
             {
                 new HorizonMoonDesignators(801, "Triton", "NI"),
                 new HorizonMoonDesignators(802, "Nereid", "NII"),
@@ -211,7 +207,7 @@ namespace OurSolarSystemAPI.Utility
                 new MoonContainer("saturn", saturnMoons, 699, 6),
                 new MoonContainer("uranus", uranusMoons,799, 7),
                 new MoonContainer("neptune", neptuneMoons, 899, 8)
-            };                   
+            };
         }
     }
 }

@@ -1,31 +1,30 @@
-using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using OurSolarSystemAPI.Models;
 
-namespace OurSolarSystemAPI.Repository.MySQL  
+namespace OurSolarSystemAPI.Repository.MySQL
 {
     public class BarycenterRepositoryMySQL
     {
         private readonly OurSolarSystemContext _context;
 
-        public BarycenterRepositoryMySQL(OurSolarSystemContext context) 
+        public BarycenterRepositoryMySQL(OurSolarSystemContext context)
         {
             _context = context;
         }
 
-        public async Task CreateBarycenter(Barycenter barycenter) 
+        public async Task CreateBarycenter(Barycenter barycenter)
         {
             await _context.Barycenters.AddAsync(barycenter);
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateSolarSystemBarycenter(SolarSystemBarycenter barycenter) 
+        public async Task CreateSolarSystemBarycenter(SolarSystemBarycenter barycenter)
         {
             await _context.SolarSystemBaryCenter.AddAsync(barycenter);
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddSunToExistingSolarSystemBarycenter(Star sun) 
+        public async Task AddSunToExistingSolarSystemBarycenter(Star sun)
         {
             SolarSystemBarycenter barycenter = await _context.SolarSystemBaryCenter.FirstOrDefaultAsync(b => b.HorizonId == 0);
 
@@ -37,7 +36,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
             }
         }
 
-        public async Task AddBarycenterToExistingSolarSystemBarycenter(Barycenter barycenter) 
+        public async Task AddBarycenterToExistingSolarSystemBarycenter(Barycenter barycenter)
         {
             SolarSystemBarycenter solarSystemBarycenter = await _context.SolarSystemBaryCenter.FirstOrDefaultAsync(s => s.HorizonId == 0);
 
@@ -49,7 +48,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
             }
         }
 
-        public async Task AddPlanetToExistingBarycenter(Planet planet, int horizonId) 
+        public async Task AddPlanetToExistingBarycenter(Planet planet, int horizonId)
         {
             Barycenter barycenter = await _context.Barycenters.FirstOrDefaultAsync(b => b.HorizonId == horizonId);
 
@@ -61,7 +60,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
             }
         }
 
-        public async Task AddMoonToExistingBarycenter(Moon moon, int horizonId) 
+        public async Task AddMoonToExistingBarycenter(Moon moon, int horizonId)
         {
             Barycenter barycenter = await _context.Barycenters.FirstOrDefaultAsync(b => b.HorizonId == horizonId);
 
@@ -74,7 +73,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
         }
 
 
-        public async Task<List<Barycenter>> requestAllBarycentersWithEphemeris() 
+        public async Task<List<Barycenter>> requestAllBarycentersWithEphemeris()
         {
             return await _context.Barycenters
             .Include(b => b.Ephemeris)

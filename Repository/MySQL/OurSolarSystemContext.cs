@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OurSolarSystemAPI.Models;
 
-namespace OurSolarSystemAPI.Repository.MySQL 
+namespace OurSolarSystemAPI.Repository.MySQL
 {
     public class OurSolarSystemContext(DbContextOptions<OurSolarSystemContext> options) : DbContext(options)
     {
@@ -11,7 +11,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
         public DbSet<Planet> Planets { get; set; }
         public DbSet<Moon> Moons { get; set; }
         public DbSet<UserFavoriteSatellite> UserFavoriteSatellites { get; set; }
-        public DbSet<ArtificialSatellite> ArtificialSatellites  { get; set; }
+        public DbSet<ArtificialSatellite> ArtificialSatellites { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<EphemerisBarycenter> EphemerisBarycenters { get; set; }
         public DbSet<EphemerisPlanet> EphemerisPlanets { get; set; }
@@ -57,7 +57,7 @@ namespace OurSolarSystemAPI.Repository.MySQL
             modelBuilder.Entity<EphemerisBarycenter>()
             .HasIndex(e => new { e.DateTime, e.Id });
 
-        
+
             modelBuilder.Entity<UserEntity>()
             .HasIndex(u => u.Username)
             .IsUnique();

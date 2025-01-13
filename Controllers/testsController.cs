@@ -1,9 +1,8 @@
-﻿using OurSolarSystemAPI.Auth;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using OurSolarSystemAPI.Repository.MySQL;
+using OurSolarSystemAPI.Auth;
 using OurSolarSystemAPI.Models;
+using OurSolarSystemAPI.Repository.MySQL;
 
 namespace OurSolarSystemAPI.Controllers
 {
@@ -20,23 +19,23 @@ namespace OurSolarSystemAPI.Controllers
             return _context.Planets.ToList();
         }
 
-    [HttpPost("login")]
-    public IActionResult Login(string username, string password)
-    {
-        if (username == "admin" && password == "password")
+        [HttpPost("login")]
+        public IActionResult Login(string username, string password)
         {
-            var token = JwtTokenGenerator.GenerateJwtToken(username, "admin");
-            return Ok(new { token });
+            if (username == "admin" && password == "password")
+            {
+                var token = JwtTokenGenerator.GenerateJwtToken(username, "admin");
+                return Ok(new { token });
+            }
+            return Unauthorized();
         }
-        return Unauthorized();
-    }
 
-    [HttpGet("authorization-test")]
-    [Authorize(Policy = "AdminOnly")]
-    public IActionResult AuthorizationTest()
-    {
-        
-        return Ok(new { StatusCode = 200 });
-    }
+        [HttpGet("authorization-test")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult AuthorizationTest()
+        {
+
+            return Ok(new { StatusCode = 200 });
+        }
     }
 }

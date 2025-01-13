@@ -1,8 +1,5 @@
-﻿using System.Text.Json.Serialization;
-
-using System.Collections.Generic;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations.Schema;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace OurSolarSystemAPI.Models
 {
@@ -15,7 +12,7 @@ namespace OurSolarSystemAPI.Models
         [BsonIgnore]
         public Planet Planet { get; set; }
         public int BarycenterId { get; set; }
-        public Barycenter Barycenter { get; set; } 
+        public Barycenter Barycenter { get; set; }
         public int BarycenterHorizonId { get; set; }
         [BsonIgnore]
         public int PlanetHorizonId { get; set; }

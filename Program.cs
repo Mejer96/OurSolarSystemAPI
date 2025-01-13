@@ -1,17 +1,17 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using OurSolarSystemAPI.Repository.MySQL;
-using OurSolarSystemAPI.Repository.NEO4J;
-using OurSolarSystemAPI.Service.MySQL;
-using OurSolarSystemAPI.Service.NEO4J;
-using OurSolarSystemAPI.Service.MongoDB;
 using Microsoft.OpenApi.Models;
 using Neo4j.Driver;
 using OurSolarSystemAPI.Repository;
-using OurSolarSystemAPI.Service;
 using OurSolarSystemAPI.Repository.MongoDB;
+using OurSolarSystemAPI.Repository.MySQL;
+using OurSolarSystemAPI.Repository.NEO4J;
+using OurSolarSystemAPI.Service;
+using OurSolarSystemAPI.Service.MongoDB;
+using OurSolarSystemAPI.Service.MySQL;
+using OurSolarSystemAPI.Service.NEO4J;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,7 +68,7 @@ builder.Services.AddScoped<ArtificialSatelliteRepositoryMySQL>();
 builder.Services.AddScoped<UserRepositoryMySQL>();
 
 // NEO4J
-builder.Services.AddSingleton(GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "Password123")));
+builder.Services.AddSingleton(GraphDatabase.Driver("neo4j+s://736db64e.databases.neo4j.io", AuthTokens.Basic("neo4j", "p6i9fPnQ8SCl4oxcccTrOMEosaHLdqeR-mPcklLCQTY")));
 builder.Services.AddScoped<BarycenterRepositoryNEO4J>();
 builder.Services.AddScoped<MoonRepositoryNEO4J>();
 builder.Services.AddScoped<PlanetRepositoryNEO4J>();
@@ -127,10 +127,10 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<OurSolarSystemContext>();
-        dbContext.Database.EnsureCreated(); // This creates the database if it does not exist
-    }
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<OurSolarSystemContext>();
+    dbContext.Database.EnsureCreated(); // This creates the database if it does not exist
+}
 
 
 // Configure the HTTP request pipeline.

@@ -1,8 +1,8 @@
 using OurSolarSystemAPI.Models;
-using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
-namespace OurSolarSystemAPI.Utility 
+namespace OurSolarSystemAPI.Utility
 {
     public class HorizonParser
     {
@@ -13,7 +13,7 @@ namespace OurSolarSystemAPI.Utility
             Regex regexEphemerisSection = new Regex(@"\$\$SOE(.*?)\$\$EOE", RegexOptions.Singleline);
             Regex regexjulianDate = new Regex(@"(.*?)= A\.D\.");
             Regex regexdate = new Regex(@"= A\.D\. (.*?) 00:00");
-    
+
             Regex regexPostionX = new Regex(@"X =(.*?)Y");
             Regex regexPostionY = new Regex(@"Y =(.*?)Z");
             Regex regexPostionZ = new Regex(@"Z =\s*(.+)");
@@ -48,7 +48,7 @@ namespace OurSolarSystemAPI.Utility
                 string fullDate = dates[i].Groups[1].Value.Trim();
                 DateTime datetime = ParseEphimerisDateToDateTime(fullDate);
 
-                 var ephemerisDict = new Dictionary<string, object>
+                var ephemerisDict = new Dictionary<string, object>
                 {
                     { "julianDate", julianDates[i].Groups[1].Value.Trim() },
                     { "dateTime", datetime },
@@ -65,14 +65,14 @@ namespace OurSolarSystemAPI.Utility
             return ephemerisData;
         }
 
-                public List<Dictionary<string, object>> ExtractEphemerisTest(string apiResponse)
+        public List<Dictionary<string, object>> ExtractEphemerisTest(string apiResponse)
         {
             List<Dictionary<string, object>> ephemerisData = new();
 
             Regex regexEphemerisSection = new Regex(@"\$\$SOE(.*?)\$\$EOE", RegexOptions.Singleline);
             Regex regexjulianDate = new Regex(@"(.*?)= A\.D\.");
             Regex regexdate = new Regex(@"= A\.D\. (.*?) 00:00");
-    
+
             Regex regexPostionX = new Regex(@"X =(.*?)Y");
             Regex regexPostionY = new Regex(@"Y =(.*?)Z");
             Regex regexPostionZ = new Regex(@"Z =\s*(.+)");
@@ -107,7 +107,7 @@ namespace OurSolarSystemAPI.Utility
                 string fullDate = dates[i].Groups[1].Value.Trim();
                 DateTime datetime = ParseEphimerisDateToDateTime(fullDate);
 
-                 var ephemerisDict = new Dictionary<string, object>
+                var ephemerisDict = new Dictionary<string, object>
                 {
                     { "julianDate", julianDates[i].Groups[1].Value.Trim() },
                     { "dateTime", datetime },
@@ -124,14 +124,14 @@ namespace OurSolarSystemAPI.Utility
             return ephemerisData;
         }
 
-                        public List<Dictionary<string, object>> ExtractEphemerisTest2(string apiResponse)
+        public List<Dictionary<string, object>> ExtractEphemerisTest2(string apiResponse)
         {
             List<Dictionary<string, object>> ephemerisData = new();
 
             Regex regexEphemerisSection = new Regex(@"\$\$SOE(.*?)\$\$EOE", RegexOptions.Singleline);
             Regex regexjulianDate = new Regex(@"(.*?)= A\.D\.");
             Regex regexdate = new Regex(@"= A\.D\. (.*?) 00:00");
-    
+
             Regex regexPostionX = new Regex(@"X =(.*?)Y");
             Regex regexPostionY = new Regex(@"Y =(.*?)Z");
             Regex regexPostionZ = new Regex(@"Z =\s*(.+)");
@@ -170,7 +170,7 @@ namespace OurSolarSystemAPI.Utility
                 string fullDate = dates[i].Groups[1].Value.Trim();
                 DateTime datetime = ParseEphimerisDateToDateTime(fullDate);
 
-                 var ephemerisDict = new Dictionary<string, object>
+                var ephemerisDict = new Dictionary<string, object>
                 {
                     { "julianDate", julianDates[i].Groups[1].Value.Trim() },
                     { "dateTime", datetime },
@@ -187,7 +187,7 @@ namespace OurSolarSystemAPI.Utility
             return ephemerisData;
         }
 
-        public DateTime ParseEphimerisDateToDateTime(string ephemerisDate) 
+        public DateTime ParseEphimerisDateToDateTime(string ephemerisDate)
         {
             var regexEphmerisData = new Regex(@"^(\d{4})-([a-zA-Z]{3})-(\d{2})$");
             var monthsToNumbers = new Dictionary<string, int>
@@ -241,8 +241,8 @@ namespace OurSolarSystemAPI.Utility
             string rotationalPeriod = regexRotationalPeriod.Match(moonAttributes).Groups[1].Value.Trim();
             string inclination = regexInclination.Match(moonAttributes).Groups[1].Value.Trim();
 
-            return new Moon 
-            { 
+            return new Moon
+            {
                 Name = moonName,
             };
         }

@@ -1,12 +1,10 @@
-﻿using System.Text.Json.Serialization;
-
-namespace OurSolarSystemAPI.Models
+﻿namespace OurSolarSystemAPI.Models
 {
     public class Star
     {
         public int Id { get; set; }
-        public int SolarSystemBarycenterId { get; set;}
-        public int SolarSystemBarycenterHorizonId { get; set;}
+        public int SolarSystemBarycenterId { get; set; }
+        public int SolarSystemBarycenterHorizonId { get; set; }
         public SolarSystemBarycenter SolarSystemBarycenter { get; set; }
         public int HorizonId { get; set; }
         public List<EphemerisSun>? Ephemeris { get; set; }
@@ -53,6 +51,6 @@ namespace OurSolarSystemAPI.Models
         public double SunspotCycle { get; set; }
 
         public double Cycle24SunspotMinimum { get; set; }
- 
+
     }
 }

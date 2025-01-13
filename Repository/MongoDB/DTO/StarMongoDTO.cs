@@ -1,5 +1,5 @@
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using OurSolarSystemAPI.Models;
 
 namespace OurSolarSystemAPI.Repository.MongoDB
@@ -8,7 +8,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
     {
         [BsonId]
         public ObjectId Id { get; set; }
- 
+
         public int HorizonId { get; set; }
         public double GravitationalParameter { get; set; }
 
@@ -85,6 +85,6 @@ namespace OurSolarSystemAPI.Repository.MongoDB
             };
         }
 
- 
+
     }
 }

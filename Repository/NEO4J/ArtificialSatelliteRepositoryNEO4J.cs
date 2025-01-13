@@ -1,10 +1,10 @@
-using OurSolarSystemAPI.Models;
 using Neo4j.Driver;
 using Neo4j.Driver.Mapping;
+using OurSolarSystemAPI.Models;
 
-namespace OurSolarSystemAPI.Repository.NEO4J 
+namespace OurSolarSystemAPI.Repository.NEO4J
 {
-    public class ArtificialSatelliteRepositoryNEO4J 
+    public class ArtificialSatelliteRepositoryNEO4J
     {
         private readonly IDriver _driver;
 
@@ -54,13 +54,13 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             return satelliteDict;
         }
 
-        public async Task<List<IRecord>> createSatelliteNodeFromObject(ArtificialSatellite satellite, int celestialBodyHorizonId) 
+        public async Task<List<IRecord>> createSatelliteNodeFromObject(ArtificialSatellite satellite, int celestialBodyHorizonId)
         {
             await using var session = _driver.AsyncSession();
             Dictionary<string, object?> satelliteAttributes = ConvertSatelliteAttributesToDict(satellite);
             Dictionary<string, object?> orbitAttributes = ConvertSatelliteOrbitalAttributesToDict(satellite);
-            
-            var parameters = new Dictionary<string, object> 
+
+            var parameters = new Dictionary<string, object>
             {
                 {"satellite", satelliteAttributes},
                 {"orbit", orbitAttributes},
@@ -74,14 +74,14 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                 CREATE (s)-[:ORBITS $orbit]->(p)
                 RETURN count(*) AS count";
 
-                var result = await session.ExecuteWriteAsync(async tx =>
-                {
-                    var cursor = await tx.RunAsync(query, parameters);
-                    return await cursor.ToListAsync();
-                });
+            var result = await session.ExecuteWriteAsync(async tx =>
+            {
+                var cursor = await tx.RunAsync(query, parameters);
+                return await cursor.ToListAsync();
+            });
             return result;
 
         }
     }
-    
+
 }

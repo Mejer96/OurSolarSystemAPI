@@ -1,13 +1,12 @@
-using OurSolarSystemAPI.Models;
-using OurSolarSystemAPI.Utility;
 using Neo4j.Driver;
 using Neo4j.Driver.Mapping;
+using OurSolarSystemAPI.Models;
 
 
-namespace OurSolarSystemAPI.Repository.NEO4J 
+namespace OurSolarSystemAPI.Repository.NEO4J
 {
 
-    public class BarycenterRepositoryNEO4J 
+    public class BarycenterRepositoryNEO4J
     {
         private readonly IDriver _driver;
 
@@ -16,16 +15,16 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             _driver = driver;
         }
 
-        public Dictionary<string, object> ConvertBarycenterObjectToDict(Barycenter barycenter) 
+        public Dictionary<string, object> ConvertBarycenterObjectToDict(Barycenter barycenter)
         {
-            return new Dictionary<string, object> 
+            return new Dictionary<string, object>
             {
                 {"name", barycenter.Name},
                 {"horizonId", barycenter.HorizonId}
             };
         }
 
-        public async Task CreateSolarSystemBarycenterNode(Barycenter solarSystemBarycenter) 
+        public async Task CreateSolarSystemBarycenterNode(Barycenter solarSystemBarycenter)
         {
             await using var session = _driver.AsyncSession();
             Dictionary<string, object> barycenter = ConvertBarycenterObjectToDict(solarSystemBarycenter);
@@ -46,12 +45,12 @@ namespace OurSolarSystemAPI.Repository.NEO4J
 
 
 
-        public async Task<List<IRecord>> CreateBarycenterNodeFromObject(Barycenter barycenter) 
+        public async Task<List<IRecord>> CreateBarycenterNodeFromObject(Barycenter barycenter)
         {
             await using var session = _driver.AsyncSession();
             Dictionary<string, object> barycenterDict = ConvertBarycenterObjectToDict(barycenter);
-            
-            var parameters = new Dictionary<string, object> 
+
+            var parameters = new Dictionary<string, object>
             {
                 {"barycenter", barycenterDict},
                 {"solarSystemBarycenterId", 0}
@@ -64,13 +63,13 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                 CREATE (b)-[:ORBITS]->(ssb)
                 RETURN count(*) AS count";
 
-                var result = await session.ExecuteWriteAsync(async tx =>
-                {
-                    var cursor = await tx.RunAsync(query, parameters);
-                    return await cursor.ToListAsync();
-                });
+            var result = await session.ExecuteWriteAsync(async tx =>
+            {
+                var cursor = await tx.RunAsync(query, parameters);
+                return await cursor.ToListAsync();
+            });
             return result;
         }
     }
-    
+
 }

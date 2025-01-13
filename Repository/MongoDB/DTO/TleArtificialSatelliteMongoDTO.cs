@@ -1,17 +1,15 @@
-using System.Text.Json.Serialization;
-using MongoDB.Bson.Serialization.Attributes;
 using OurSolarSystemAPI.Models;
 
 
 namespace OurSolarSystemAPI.Repository.MongoDB
 {
-    public class TleArtificialSatelliteMongoDTO() 
+    public class TleArtificialSatelliteMongoDTO()
     {
 
         public int NoradId { get; set; }
         public string TleFirstLine { get; set; }
         public string TleSecondLine { get; set; }
-        public DateTime ScrapedAt { get; set; } 
+        public DateTime ScrapedAt { get; set; }
 
         public static TleArtificialSatelliteMongoDTO ConvertToDto(TleArtificialSatellite satellite)
         {
@@ -25,6 +23,6 @@ namespace OurSolarSystemAPI.Repository.MongoDB
         }
     }
 
-    
+
 
 }

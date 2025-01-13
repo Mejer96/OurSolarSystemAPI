@@ -7,7 +7,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
     public class ArtificialSatelliteMongoDTO
     {
         [BsonId]
-        public ObjectId Id {get; set; }
+        public ObjectId Id { get; set; }
         public List<TleArtificialSatelliteMongoDTO> Tle { get; set; }
         public string? LaunchDate { get; set; }
         public string? LaunchSite { get; set; }
@@ -30,7 +30,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
         {
             var tleDTOs = new List<TleArtificialSatelliteMongoDTO>();
 
-            foreach (var tle in satellite.Tle) 
+            foreach (var tle in satellite.Tle)
             {
                 tleDTOs.Add(TleArtificialSatelliteMongoDTO.ConvertToDto(tle));
             }

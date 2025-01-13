@@ -1,9 +1,4 @@
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using System.ComponentModel.DataAnnotations;
-
 using System.Text.Json.Serialization;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OurSolarSystemAPI.Models
 {
@@ -17,7 +12,7 @@ namespace OurSolarSystemAPI.Models
 
         public static EphemerisPlanet ConvertEphemerisDictToObject(Dictionary<string, object> ephemerisDict, Planet planet)
         {
-            return new EphemerisPlanet 
+            return new EphemerisPlanet
             {
                 Planet = planet,
                 PlanetHorizonId = planet.HorizonId,
@@ -27,7 +22,7 @@ namespace OurSolarSystemAPI.Models
                 VelocityX = Convert.ToDouble(ephemerisDict["velocityX"]),
                 VelocityY = Convert.ToDouble(ephemerisDict["velocityY"]),
                 VelocityZ = Convert.ToDouble(ephemerisDict["velocityZ"]),
-                DateTime = (DateTime) ephemerisDict["dateTime"],
+                DateTime = (DateTime)ephemerisDict["dateTime"],
                 JulianDate = Convert.ToDouble(ephemerisDict["julianDate"])
             };
         }

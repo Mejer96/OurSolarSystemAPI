@@ -2,9 +2,9 @@ using Neo4j.Driver;
 using Neo4j.Driver.Mapping;
 using OurSolarSystemAPI.Models;
 
-namespace OurSolarSystemAPI.Repository.NEO4J 
+namespace OurSolarSystemAPI.Repository.NEO4J
 {
-    public class MoonRepositoryNEO4J 
+    public class MoonRepositoryNEO4J
     {
         private readonly IDriver _driver;
 
@@ -25,14 +25,14 @@ namespace OurSolarSystemAPI.Repository.NEO4J
 
 
 
-        public async Task<List<IRecord>> createMoonNodeFromMoonObject(Moon moon, int planetHorizonId, int barycenterHorizonId) 
+        public async Task<List<IRecord>> createMoonNodeFromMoonObject(Moon moon, int planetHorizonId, int barycenterHorizonId)
         {
             await using var session = _driver.AsyncSession();
             Dictionary<string, object?> moonAttributes = ConvertMoonAttributesToDict(moon);
-       
 
-            
-            var parameters = new Dictionary<string, object> 
+
+
+            var parameters = new Dictionary<string, object>
             {
                 {"moon", moonAttributes},
                 {"planetId", planetHorizonId},
@@ -49,13 +49,13 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                 CREATE (m)-[:PART_OF_MOON_SYSTEM_OF]->(p)
                 RETURN count(*) AS count";
 
-                var result = await session.ExecuteWriteAsync(async tx =>
-                {
-                    var cursor = await tx.RunAsync(query, parameters);
-                    return await cursor.ToListAsync();
-                });
+            var result = await session.ExecuteWriteAsync(async tx =>
+            {
+                var cursor = await tx.RunAsync(query, parameters);
+                return await cursor.ToListAsync();
+            });
             return result;
         }
     }
-    
+
 }

@@ -1,10 +1,10 @@
-using OurSolarSystemAPI.Repository.MySQL;
-using OurSolarSystemAPI.Repository.MongoDB;
 using OurSolarSystemAPI.Models;
+using OurSolarSystemAPI.Repository.MongoDB;
+using OurSolarSystemAPI.Repository.MySQL;
 
-namespace OurSolarSystemAPI.Service.MongoDB 
+namespace OurSolarSystemAPI.Service.MongoDB
 {
-    public class MigrationServiceMongoDB 
+    public class MigrationServiceMongoDB
     {
 
         private readonly PlanetRepositoryMySQL _planetRepoMySQL;
@@ -16,7 +16,7 @@ namespace OurSolarSystemAPI.Service.MongoDB
         private readonly EphemerisRepositoryMongoDB _ephemerisRepoMongoDB;
         private readonly ArtificialSatelliteRepositoryMySQL _artificialSatelliteRepoMySQL;
         private readonly ArtificialSatelliteRepositoryMongoDB _artificialSatelliteRepoMongoDB;
-    
+
 
         public MigrationServiceMongoDB(
             PlanetRepositoryMySQL planetRepoMySQL,
@@ -28,7 +28,7 @@ namespace OurSolarSystemAPI.Service.MongoDB
             MoonRepositoryMongoDB moonRepoMongoDB,
             EphemerisRepositoryMongoDB ephemerisRepoMongoDB,
             ArtificialSatelliteRepositoryMongoDB artificialSatelliteRepoMongoDB
-            ) 
+            )
         {
             _planetRepoMySQL = planetRepoMySQL;
             _barycenterRepoMySQL = barycenterRepoMySQL;
@@ -43,40 +43,40 @@ namespace OurSolarSystemAPI.Service.MongoDB
 
 
 
-        public async Task MigrateBarycenters() 
+        public async Task MigrateBarycenters()
         {
             List<Barycenter> barycenters = await _barycenterRepoMySQL.requestAllBarycentersWithEphemeris();
             List<Planet> planets = await _planetRepoMySQL.GetAllPlanetsWithMoons();
 
-            foreach (var barycenter in barycenters) 
+            foreach (var barycenter in barycenters)
             {
                 if (barycenter.Ephemeris is null) throw new Exception($"No ephemeris data for planet with horizon id: {barycenter.HorizonId}");
 
 
-               BarycenterMongoDTO barycenterDTO = BarycenterMongoDTO.ConvertToMongoDTO(barycenter);
+                BarycenterMongoDTO barycenterDTO = BarycenterMongoDTO.ConvertToMongoDTO(barycenter);
 
-               foreach (var planet in planets) 
-               {
-                    if (planet.BarycenterHorizonId == barycenter.HorizonId) 
+                foreach (var planet in planets)
+                {
+                    if (planet.BarycenterHorizonId == barycenter.HorizonId)
                     {
                         barycenterDTO.Planet = PlanetMongoDTO.ConvertToMongoDTO(planet);
                     }
 
-               }
-               await _barycenterRepoMongoDB.CreateBarycenterAsync(barycenterDTO);
-               var ephemerisDTOs = new List<EphemerisMongoDTO>();
-               
-               foreach (var ephemeris in barycenter.Ephemeris) 
-               {
-                    ephemerisDTOs.Add(EphemerisMongoDTO.ConvertToEphemerisMongoDTO(ephemeris, barycenter.HorizonId, barycenterDTO.Id));
-               }
+                }
+                await _barycenterRepoMongoDB.CreateBarycenterAsync(barycenterDTO);
+                var ephemerisDTOs = new List<EphemerisMongoDTO>();
 
-               await _ephemerisRepoMongoDB.CreateBarycenterEphemerisManyAsync(ephemerisDTOs);
+                foreach (var ephemeris in barycenter.Ephemeris)
+                {
+                    ephemerisDTOs.Add(EphemerisMongoDTO.ConvertToEphemerisMongoDTO(ephemeris, barycenter.HorizonId, barycenterDTO.Id));
+                }
+
+                await _ephemerisRepoMongoDB.CreateBarycenterEphemerisManyAsync(ephemerisDTOs);
 
             }
         }
 
-        public async Task MigrateSun() 
+        public async Task MigrateSun()
         {
             Star sun = await _planetRepoMySQL.GetSunWithEphemeris();
 
@@ -86,23 +86,23 @@ namespace OurSolarSystemAPI.Service.MongoDB
 
             await _planetRepoMongoDB.CreateSun(sunDTO);
 
-            foreach (EphemerisSun ephemeris in sun.Ephemeris) 
+            foreach (EphemerisSun ephemeris in sun.Ephemeris)
             {
                 ephemerisDTOs.Add(EphemerisMongoDTO.ConvertToEphemerisMongoDTO(ephemeris, sun.HorizonId, sunDTO.Id));
             }
             await _ephemerisRepoMongoDB.CreatePlanetEphemerisManyAsync(ephemerisDTOs);
         }
 
-        public async Task MigratePlanets() 
+        public async Task MigratePlanets()
         {
             List<Planet> planets = await _planetRepoMySQL.GetAllPlanetsWithEphemerisAndMoons();
 
-            foreach (var planet in planets) 
+            foreach (var planet in planets)
             {
                 if (planet.Ephemeris is null) throw new Exception($"No ephemeris data for planet with horizon id: {planet.HorizonId}");
                 PlanetMongoDTO planetDTO = PlanetMongoDTO.ConvertToMongoDTO(planet);
                 var moonDTOs = new List<MoonMongoDTO>();
-                
+
                 if (planet.Moons != null)
                 {
                     foreach (Moon moon in planet.Moons)
@@ -114,7 +114,7 @@ namespace OurSolarSystemAPI.Service.MongoDB
                 await _planetRepoMongoDB.CreatePlanet(planetDTO);
                 var ephemerisDTOs = new List<EphemerisMongoDTO>();
 
-                foreach (EphemerisPlanet ephemeris in planet.Ephemeris) 
+                foreach (EphemerisPlanet ephemeris in planet.Ephemeris)
                 {
                     ephemerisDTOs.Add(EphemerisMongoDTO.ConvertToEphemerisMongoDTO(ephemeris, planet.HorizonId, planetDTO.Id));
                 }
@@ -124,36 +124,36 @@ namespace OurSolarSystemAPI.Service.MongoDB
             }
         }
 
-        public async Task MigrateMoons() 
+        public async Task MigrateMoons()
         {
             List<Moon> moons = await _moonRepoMySQL.requestAllMoonsWithEphemeris();
             var moonDTOs = new List<MoonMongoDTOWithId>();
 
-            foreach (var moon in moons) 
+            foreach (var moon in moons)
             {
                 if (moon.Ephemeris is null) throw new Exception($"No ephemeris data for moon with horizon id: {moon.HorizonId}");
                 MoonMongoDTOWithId moonDTO = MoonMongoDTOWithId.ConvertToMoonMongoDTO(moon);
                 await _moonRepoMongoDB.CreateMoonAsync(moonDTO);
                 var ephemerisDTOs = new List<EphemerisMongoDTO>();
 
-               foreach (Ephemeris ephemeris in moon.Ephemeris) 
-               {
+                foreach (Ephemeris ephemeris in moon.Ephemeris)
+                {
                     ephemerisDTOs.Add(EphemerisMongoDTO.ConvertToEphemerisMongoDTO(ephemeris, moon.HorizonId, moonDTO.Id));
-               }
-               await _ephemerisRepoMongoDB.CreateMoonEphemerisManyAsync(ephemerisDTOs);
+                }
+                await _ephemerisRepoMongoDB.CreateMoonEphemerisManyAsync(ephemerisDTOs);
             }
         }
 
-        public async Task MigrateArtificialSatellites() 
+        public async Task MigrateArtificialSatellites()
         {
             var artificialSatellitesDTOs = new List<ArtificialSatelliteMongoDTO>();
             List<ArtificialSatellite> artificialSatellites = await _artificialSatelliteRepoMySQL.RequestAllSatellites();
 
-            foreach (var artificialSatellite in artificialSatellites) 
+            foreach (var artificialSatellite in artificialSatellites)
             {
                 artificialSatellitesDTOs.Add(ArtificialSatelliteMongoDTO.ConvertToArtificialSatelliteMongoDTO(artificialSatellite));
             }
             await _artificialSatelliteRepoMongoDB.CreateSatellites(artificialSatellitesDTOs);
-        }   
+        }
     }
 }

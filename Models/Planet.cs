@@ -44,6 +44,6 @@ namespace OurSolarSystemAPI.Models
         public double? MinPlanetaryIRMean { get; set; }
     }
 
-    
+
 
 }

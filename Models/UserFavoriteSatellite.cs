@@ -1,7 +1,7 @@
 
-namespace OurSolarSystemAPI.Models 
+namespace OurSolarSystemAPI.Models
 {
-    public class UserFavoriteSatellite 
+    public class UserFavoriteSatellite
     {
         public int Id { get; set; }
         public required int UserId { get; set; }

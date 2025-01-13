@@ -1,6 +1,5 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
 namespace OurSolarSystemAPI.Models
 {
@@ -18,7 +17,7 @@ namespace OurSolarSystemAPI.Models
 
         public static EphemerisMoon ConvertEphemerisDictToObject(Dictionary<string, object> ephemerisDict, Moon moon)
         {
-            return new EphemerisMoon 
+            return new EphemerisMoon
             {
                 Moon = moon,
                 MoonHorizonId = moon.HorizonId,
@@ -28,7 +27,7 @@ namespace OurSolarSystemAPI.Models
                 VelocityX = Convert.ToDouble(ephemerisDict["velocityX"]),
                 VelocityY = Convert.ToDouble(ephemerisDict["velocityY"]),
                 VelocityZ = Convert.ToDouble(ephemerisDict["velocityZ"]),
-                DateTime = (DateTime) ephemerisDict["dateTime"],
+                DateTime = (DateTime)ephemerisDict["dateTime"],
                 JulianDate = Convert.ToDouble(ephemerisDict["julianDate"])
             };
         }

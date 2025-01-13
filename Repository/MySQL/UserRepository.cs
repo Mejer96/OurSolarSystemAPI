@@ -1,11 +1,11 @@
-﻿using OurSolarSystemAPI.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using OurSolarSystemAPI.Models;
 using OurSolarSystemAPI.Repository.MySQL;
 using OurSolarSystemAPI.Exceptions;
 
 namespace OurSolarSystemAPI.Repository
 {
-    public class UserDto 
+    public class UserDto
     {
         public required string Username { get; set; }
         public required int Id { get; set; }
@@ -15,7 +15,7 @@ namespace OurSolarSystemAPI.Repository
 
         private readonly OurSolarSystemContext _context;
 
-        public UserRepositoryMySQL(OurSolarSystemContext context) 
+        public UserRepositoryMySQL(OurSolarSystemContext context)
         {
             _context = context;
         }
@@ -31,7 +31,7 @@ namespace OurSolarSystemAPI.Repository
                 .ToListAsync();
         }
 
-        public async Task<UserDto> GetUserById(int id) 
+        public async Task<UserDto> GetUserById(int id)
         {
             return await _context.Users.Where(u => u.Id == id)
             .Select(u => new UserDto
@@ -49,7 +49,7 @@ namespace OurSolarSystemAPI.Repository
             .FirstOrDefaultAsync() ?? throw new EntityNotFound("No user found by that id");
         }
 
-        public async Task<UserDto> GetUserByUsername(string username) 
+        public async Task<UserDto> GetUserByUsername(string username)
         {
             return await _context.Users.Where(u => u.Username == username)
             .Select(u => new UserDto
@@ -60,7 +60,7 @@ namespace OurSolarSystemAPI.Repository
             .FirstOrDefaultAsync() ?? throw new EntityNotFound("No user found by that username");
         }
 
-        public async Task<UserDto> GetUserByUsernameAndPassword(string username, string password) 
+        public async Task<UserDto> GetUserByUsernameAndPassword(string username, string password)
         {
             return await _context.Users.Where(u => u.Username == username && u.Password == password)
             .Select(u => new UserDto
@@ -87,7 +87,7 @@ namespace OurSolarSystemAPI.Repository
                 };
         }
 
-        public async Task<bool> DeleteUser(int userId) 
+        public async Task<bool> DeleteUser(int userId)
         {
             var result = await _context.Users
             .Where(u => u.Id == userId)
@@ -98,7 +98,7 @@ namespace OurSolarSystemAPI.Repository
             return true;
         }
 
-        public async Task<UserDto> UpdateUser(UserEntity user) 
+        public async Task<UserDto> UpdateUser(UserEntity user)
         {
             _context.Users.Update(user);
             var result = await _context.SaveChangesAsync();
@@ -106,10 +106,10 @@ namespace OurSolarSystemAPI.Repository
              if (result != 1) throw new EntityNotFound("User not updated");
 
             return new UserDto
-                {
-                    Username = user.Username,
-                    Id = user.Id
-                }; 
+            {
+                Username = user.Username,
+                Id = user.Id
+            };
         }
     }
 }

@@ -1,36 +1,36 @@
 using OurSolarSystemAPI.Models;
 using OurSolarSystemAPI.Repository.MySQL;
 
-namespace OurSolarSystemAPI.Service 
+namespace OurSolarSystemAPI.Service
 {
-    public class ArtificialSatelliteService 
+    public class ArtificialSatelliteService
     {
         private readonly ArtificialSatelliteRepositoryMySQL _artificialSatelliteRepo;
 
-        public ArtificialSatelliteService(ArtificialSatelliteRepositoryMySQL artificialSatelliteRepo) 
+        public ArtificialSatelliteService(ArtificialSatelliteRepositoryMySQL artificialSatelliteRepo)
         {
-             _artificialSatelliteRepo = artificialSatelliteRepo;
+            _artificialSatelliteRepo = artificialSatelliteRepo;
         }
 
-        public ArtificialSatellite RequestSatelliteByNoradId(int noradId) 
+        public ArtificialSatellite RequestSatelliteByNoradId(int noradId)
         {
-           return _artificialSatelliteRepo.RequestSatelitteByNoradId(noradId);
+            return _artificialSatelliteRepo.RequestSatelitteByNoradId(noradId);
         }
 
-        public ArtificialSatellite RequestSatelliteByNoradIdAndDateTime(int noradId, DateTime dateTime) 
+        public ArtificialSatellite RequestSatelliteByNoradIdAndDateTime(int noradId, DateTime dateTime)
         {
             return _artificialSatelliteRepo.RequestSatelliteLocationByNoradIdAndDateTime(noradId, dateTime);
         }
 
-        public async Task<bool> CheckIfSatelliteExistsByNoradId(int noradId) 
+        public async Task<bool> CheckIfSatelliteExistsByNoradId(int noradId)
         {
             return await _artificialSatelliteRepo.CheckIfSatelliteExistsByNoradId(noradId);
         }
-/*         public async Task<bool> AddTleToExistingSatellite(int noradId) 
-        {
+        /*         public async Task<bool> AddTleToExistingSatellite(int noradId) 
+                {
 
-        } */
-    
+                } */
+
     }
 
 }

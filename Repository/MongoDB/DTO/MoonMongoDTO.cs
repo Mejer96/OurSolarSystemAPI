@@ -3,9 +3,9 @@ using MongoDB.Bson.Serialization.Attributes;
 using OurSolarSystemAPI.Models;
 
 
-namespace OurSolarSystemAPI.Repository.MongoDB 
+namespace OurSolarSystemAPI.Repository.MongoDB
 {
-    public class MoonMongoDTO 
+    public class MoonMongoDTO
     {
         public int HorizonId { get; set; }
         public required string Name { get; set; }
@@ -24,7 +24,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
     public class MoonMongoDTOWithId : MoonMongoDTO
     {
         [BsonId]
-        public ObjectId Id {get; set; }
+        public ObjectId Id { get; set; }
 
         public static new MoonMongoDTOWithId ConvertToMoonMongoDTO(Moon moon)
         {
@@ -37,5 +37,5 @@ namespace OurSolarSystemAPI.Repository.MongoDB
     }
 
 
-    
+
 }

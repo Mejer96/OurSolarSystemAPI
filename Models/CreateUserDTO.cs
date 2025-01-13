@@ -1,4 +1,4 @@
-namespace OurSolarSystemAPI.Models 
+namespace OurSolarSystemAPI.Models
 {
     public class CreateUserDto
     {

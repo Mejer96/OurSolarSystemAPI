@@ -17,7 +17,7 @@ namespace OurSolarSystemAPI.Repository.MongoDB
             _solarSystemBarycenter = context.GetCollection<SolarSystemBarycenterMongoDTO>("SolarSystemBarycenter");
         }
 
-        public async Task createSolarSystemBarycenter(SolarSystemBarycenterMongoDTO solarSystemBarycenter) 
+        public async Task createSolarSystemBarycenter(SolarSystemBarycenterMongoDTO solarSystemBarycenter)
         {
             await _solarSystemBarycenter.InsertOneAsync(solarSystemBarycenter);
         }

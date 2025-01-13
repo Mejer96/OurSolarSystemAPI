@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
 namespace OurSolarSystemAPI.Repository.MongoDB

@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using OurSolarSystemAPI.Service.MySQL;
 using OurSolarSystemAPI.Models;
 using OurSolarSystemAPI.Repository.MySQL;
 using OurSolarSystemAPI.Controllers.ExceptionHandler;
+using OurSolarSystemAPI.Service.MySQL;
 
-namespace OurSolarSystemAPI.Controllers.MySQL 
+namespace OurSolarSystemAPI.Controllers.MySQL
 {
     [ApiController]
     [Route("mysql/api/planet")]
@@ -12,7 +12,7 @@ namespace OurSolarSystemAPI.Controllers.MySQL
     {
         private readonly PlanetServiceMySQL _planetService;
 
-        public PlanetControllerMySQL(PlanetServiceMySQL planetService) 
+        public PlanetControllerMySQL(PlanetServiceMySQL planetService)
         {
             _planetService = planetService;
         }
