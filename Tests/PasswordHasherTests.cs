@@ -6,9 +6,9 @@ namespace OurSolarSystemAPI
     public class PasswordHasherTest
     {
         [Theory]
-        [InlineData("password123", "salt123")]
-        [InlineData("anotherPassword", "differentSalt")]
-        [InlineData("yetAnotherPassword", "yetAnotherSalt")]
+        [InlineData("password123", "c2FsdDEyMw==")] // "salt123" in Base-64
+        [InlineData("anotherPassword", "ZGlmZmVyZW50U2FsdA==")] // "differentSalt" in Base-64
+        [InlineData("yetAnotherPassword", "eWV0QW5vdGhlclNhbHQ=")] // "yetAnotherSalt" in Base-64
         public void HashPasswordWithSalt_ShouldReturnValidHash(string password, string salt)
         {
             // Act

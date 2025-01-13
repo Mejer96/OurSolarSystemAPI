@@ -19,6 +19,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
     <PackageReference Include="MongoDB.Driver" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0" />
     <PackageReference Include="Neo4j.Driver" Version="5.27.0" />
@@ -43,6 +44,10 @@
 
   <ItemGroup>
     <None Include="Tests\ApiTests\Api Tests - User and priviledges.postman_collection (1).json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="OurSolarSystemTest\OurSolarSystemTest.csproj" />
   </ItemGroup>
 
 </Project>
