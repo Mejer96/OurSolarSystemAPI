@@ -3,7 +3,7 @@ namespace OurSolarSystemAPI.Utility
 {
     public static class OurSolarSystemCalcutator
     {
-        public static double CalculateSum(List<Double> planetAttributes)
+        public static double CalculateSum(double[] planetAttributes)
         {
             double sum = 0;
 
