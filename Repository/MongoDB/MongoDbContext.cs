@@ -7,11 +7,11 @@ namespace OurSolarSystemAPI.Repository.MongoDB
     {
         private readonly IMongoDatabase _database;
 
-        public MongoDbContext(IConfiguration configuration)
+        public MongoDbContext()
         {
-            var settings = configuration.GetSection("MongoDbSettings");
-            var client = new MongoClient(settings["ConnectionString"]);
-            _database = client.GetDatabase(settings["DatabaseName"]);
+        
+            var client = new MongoClient("mongodb://localhost:27017/");
+            _database = client.GetDatabase("OurSolarSystem");
         }
 
         public IMongoCollection<T> GetCollection<T>(string collectionName)

@@ -41,8 +41,7 @@ namespace OurSolarSystemAPI.Service.NEO4J
         public async Task MigrateBarycenters()
         {
             List<Barycenter> barycenters = await _barycenterRepoMySQL.requestAllBarycentersWithEphemeris();
-            await _barycenterRepoNEO4J.CreateSolarSystemBarycenterNode(barycenters[0]);
-            barycenters.RemoveAt(0);
+            await _barycenterRepoNEO4J.CreateSolarSystemBarycenterNode();
 
             foreach (var barycenter in barycenters)
             {

@@ -115,15 +115,15 @@ namespace OurSolarSystemAPI.Service
                     Moon moon = horizonParser.ExtractMoonData(apiResponse);
                     var ephemeris = new List<EphemerisMoon>();
                     List<Dictionary<string, object>> vectorSets = horizonParser.ExtractEphemeris(apiResponse);
+                    moon.PlanetHorizonId = mooncontainer.PlanetHorizonId;
+                    moon.BarycenterHorizonId = mooncontainer.BarycenterHorizonId;
+                    moon.HorizonId = moonDesignators.ID;
+                    moon.PlanetName = mooncontainer.Name;
 
                     foreach (var vectorSet in vectorSets)
                     {
                         ephemeris.Add(EphemerisMoon.ConvertEphemerisDictToObject(vectorSet, moon));
                     }
-                    moon.PlanetHorizonId = mooncontainer.PlanetHorizonId;
-                    moon.BarycenterHorizonId = mooncontainer.BarycenterHorizonId;
-                    moon.HorizonId = moonDesignators.ID;
-                    moon.PlanetName = mooncontainer.Name;
                     moon.Ephemeris = ephemeris;
                     moons.Add(moon);
                 }

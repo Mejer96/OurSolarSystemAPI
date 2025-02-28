@@ -42,6 +42,7 @@ public class MigrationControllerMongoDB : ControllerBase
     public async Task<IActionResult> ScrapePlanets()
     {
         await _migrationService.MigratePlanets();
+        await _migrationService.MigrateMoons();
 
         return Ok(new
         {

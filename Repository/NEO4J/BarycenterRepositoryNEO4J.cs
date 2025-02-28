@@ -24,10 +24,14 @@ namespace OurSolarSystemAPI.Repository.NEO4J
             };
         }
 
-        public async Task CreateSolarSystemBarycenterNode(Barycenter solarSystemBarycenter)
+        public async Task CreateSolarSystemBarycenterNode()
         {
             await using var session = _driver.AsyncSession();
-            Dictionary<string, object> barycenter = ConvertBarycenterObjectToDict(solarSystemBarycenter);
+            var barycenter = new Dictionary<string, object>
+            {
+                { "horizonId", 0 },
+                { "name", "Solar System Barycenter" }
+            };
             var parameters = new Dictionary<string, object>
             {
                 { "barycenter", barycenter }

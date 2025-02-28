@@ -43,7 +43,7 @@ namespace OurSolarSystemAPI.Repository.NEO4J
                 CREATE (m:Moon $moon)
                 WITH m
                 MATCH (b:Barycenter) WHERE b.horizonId = $barycenterId
-                CREATE (m)-[:ORBITS $orbit]->(b)
+                CREATE (m)-[:ORBITS]->(b)
                 WITH m
                 MATCH (p:Planet) WHERE p.horizonId = $planetId
                 CREATE (m)-[:PART_OF_MOON_SYSTEM_OF]->(p)
